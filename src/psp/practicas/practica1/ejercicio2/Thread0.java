@@ -1,5 +1,9 @@
 package psp.practicas.practica1.ejercicio2;
 
+/**
+ * Objeto Thread el cual al cargar muestra (Soy {mensaje})
+ * en un tiempo y veces asignados
+ */
 public class Thread0 extends Thread {
 	private String mensaje;
 	private int retardo;
@@ -13,18 +17,14 @@ public class Thread0 extends Thread {
 	
 	/**
 	 * Pre: ---
-	 * Post: el metodo run() contiene el codigo a ejecutar por
-	 * 		parte del hilo.
+	 * Post: Metodo el cual se ejecuta al iniciar
+	 * 		 el thread
 	 */
 	public void run() {
 		for(int i = 1; i <= veces; i++) {
 			System.out.println(mensaje);
 			try {
-				/*
-				 * Paraliza le ejecucion del hilo 
-				 * [retardo] milisegundos
-				 */
-				Thread.sleep(retardo);
+				Thread.sleep(retardo); // Espera {milisegundos}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

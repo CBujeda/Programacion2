@@ -32,15 +32,20 @@ public class T_Calculator extends Thread  {
 		if(accion == 1) {
 			System.out.println("La media es: " + media());
 		}else if(accion == 2) {
-			int min = t[0];
-			int max = t[0];
-			for(int i = 0; i < t.length;i++) {
-				if(t[i] < min) { 
-					min = t[i];
-				} else if(t[i] > max) { 
-					max = t[i]; }
+			if(t.length > 0) {
+				int min = t[0];
+				int max = t[0];
+				for(int i = 0; i < t.length;i++) {
+					if(t[i] < min) { 
+						min = t[i];
+					} else if(t[i] > max) { 
+						max = t[i]; }
+				}
+				System.out.println("El valor max = " + max +" | El Valor min = " + min);
+			} else {
+				System.out.println("[ERROR] - Datos fuera de rango");
 			}
-			System.out.println("El valor max = " + max +" | El Valor min = " + min);
+			
 		}else if(accion == 3) {
 			double media = media();
 			double[] t2 = new double[t.length];

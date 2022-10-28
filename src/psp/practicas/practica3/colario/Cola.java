@@ -1,5 +1,9 @@
 package psp.practicas.practica3.colario;
 
+/**
+ * ES - Objeto el cual crea una cola
+ * EN - Object which creates a queue
+ */
 public class Cola {
 
 	private Node first;

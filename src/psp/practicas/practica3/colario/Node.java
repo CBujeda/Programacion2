@@ -1,5 +1,9 @@
 package psp.practicas.practica3.colario;
 
+/*
+ * ES - Nodo de la cola
+ * EN - Queue node
+ */
 public class Node {
 	
 	private String texto;

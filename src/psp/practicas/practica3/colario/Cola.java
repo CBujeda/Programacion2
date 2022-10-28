@@ -6,7 +6,9 @@ public class Cola {
 	private Node last;
 	private int size = 0 ;
 	
-	
+	/*
+	 * CONSTRUCTORS
+	 */
 	public Cola() {
 		super();
 	}
@@ -16,6 +18,9 @@ public class Cola {
 		this.last = last;
 	}
 
+	/*
+	 * Getters and setters 
+	 */
 	public Node getFirst() {
 		return first;
 	}
@@ -40,6 +45,11 @@ public class Cola {
 		this.size = size;
 	}
 	
+	/**
+	 * Pre:
+	 * Post: ES - Método el cual añade un nodo a la cola.
+	 * 		 EN - This function add a node on the queue.
+	 */
 	public boolean push(Node node) {
 		
 		try {
@@ -62,6 +72,11 @@ public class Cola {
 		}	
 	}
 	
+	/**
+	 * Pre:
+	 * Post: ES - Método el cual saca un nodo de la cola.
+	 * 		 EN - This function pull out the node to the queue. 
+	 */
 	public Node pop() {
 		Node p = null; 
 		try {
@@ -78,7 +93,11 @@ public class Cola {
 		return p;	
 	}
 
-	
+	/**
+	 * Pre:
+	 * Post: ES - Método el cual comprueba si la cola esta vacía.
+	 * 		 EN - This function verify if the queue is empty
+	 */
 	public boolean isEmpty() {
 		if(size == 0) {
 			return false;
@@ -87,6 +106,11 @@ public class Cola {
 		}
 	}
 	
+	/**
+	 * Pre:
+	 * Post: ES - Método el cual imprime por consola la cola.
+	 * 		 EN - This function print the queue in the console.
+	 */
 	public void show() {show(true);}
 	public void show(boolean ln) {
 		if(size > 0) {

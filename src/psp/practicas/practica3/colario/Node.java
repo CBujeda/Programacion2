@@ -5,10 +5,16 @@ public class Node {
 	private String texto;
 	private Node next;
 	
+	/**
+	 * CONSTRUCTOR
+	 */
 	public Node(String texto){
 		this.texto = texto;
 	}
-
+	
+	/*
+	 * Getters and setters 
+	 */
 	public String getTexto() {
 		return texto;
 	}

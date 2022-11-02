@@ -8,13 +8,16 @@ public class Cola {
 
 	private Node first;
 	private Node last;
+	private int maxSize;
 	private int size = 0 ;
 	
 	/*
 	 * CONSTRUCTORS
 	 */
-	public Cola() {
+	public Cola(int maxSize) {
 		super();
+		this.maxSize = maxSize;
+		
 	}
 
 	public Cola(Node first, Node last) {
@@ -55,25 +58,29 @@ public class Cola {
 	 * 		 EN - This function add a node on the queue.
 	 */
 	public boolean push(Node node) {
-		
-		try {
-			if(size == 0) {
-				first = node;
-				last = node;
-				size++;
-				return true;
-			}else {
-				Node p = last;
-				p.setNext(node);
-				last = node;
-				
-				size++;
-				return true;
-			}
-		} catch(Exception e) {
-			System.out.println(e.toString());
+		if(this.maxSize > size) {
+			try {
+				if(size == 0) {
+					first = node;
+					last = node;
+					size++;
+					return true;
+				}else {
+					Node p = last;
+					p.setNext(node);
+					last = node;
+					
+					size++;
+					return true;
+				}
+			} catch(Exception e) {
+				System.out.println(e.toString());
+				return false;
+			}	
+		}else {
+			System.out.println("[ERROR]  Size = " + (this.size+1) + " !> Size Max " + this.maxSize);
 			return false;
-		}	
+		}
 	}
 	
 	/**
@@ -99,7 +106,7 @@ public class Cola {
 
 	/**
 	 * Pre:
-	 * Post: ES - Método el cual comprueba si la cola esta vacía.
+	 * Post: ES - Método el cual comprueba si la cola está vacía.
 	 * 		 EN - This function verify if the queue is empty
 	 */
 	public boolean isEmpty() {

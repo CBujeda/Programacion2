@@ -2,6 +2,7 @@ package psp.practicas.practica3.threads;
 
 import psp.practicas.practica3.Semaforo;
 import psp.practicas.practica3.colario.Cola;
+import psp.practicas.practica3.colario.Node;
 
 public class Th_Writter  extends Thread  {
 
@@ -21,10 +22,8 @@ public class Th_Writter  extends Thread  {
 	
 	@Override
 	public void run() {
-		try {
-			this.sWritter.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		for(int i = 0; i < 8 ; i++) {
+			c.push(new Node("Hola " + this.id));
 		}
 		
 		

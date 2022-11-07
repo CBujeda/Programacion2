@@ -12,9 +12,7 @@ public class Cola {
 	private Node last;
 	private int maxSize;
 	private int size = 0;
-	private Semaforo mutex = new Semaforo(1,true);
-	private Semaforo existData = new Semaforo (0,true);
-	private Semaforo existSize;
+
 	
 	/*
 	 * CONSTRUCTORS
@@ -22,7 +20,6 @@ public class Cola {
 	public Cola(int maxSize) {
 		super();
 		this.maxSize = maxSize;
-		this.existSize = new Semaforo(maxSize,true);
 	}
 
 	public Cola(Node first, Node last) {
@@ -63,40 +60,26 @@ public class Cola {
 	 * 		 EN - This function add a node on the queue.
 	 */
 	public boolean push(Node node) {
-		try {
-			this.existSize.acquire();
-			this.mutex.acquire();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 		if(this.maxSize > size) {
 			try {
 				if(size == 0) {
 					first = node;
 					last = node;
 					size++;
-					this.mutex.release();
-					this.existData.release();
 					return true;
 				}else {
 					Node p = last;
 					p.setNext(node);
 					last = node;
 					size++;
-					this.mutex.release();
-					this.existData.release();
 					return true;
 				}
 			} catch(Exception e) {
 				System.out.println(e.toString());
-				this.mutex.release();
-				this.existData.release();
 				return false;
 			}	
 		}else {
 			System.out.println("[ERROR]  Size = " + (this.size+1) + " !> Size Max " + this.maxSize);
-			this.mutex.release();
-			this.existData.release();
 			return false;
 		}
 		
@@ -108,31 +91,18 @@ public class Cola {
 	 * 		 EN - This function pull out the node to the queue. 
 	 */
 	public Node pop() {
-		try {
-			this.existData.acquire();
-			this.mutex.acquire();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		Node p = null; 
 		try {
 			if(size > 0) {
 				p = first;
 				first = first.getNext();
 				size--;
-				this.mutex.release();
-				this.existSize.release();
 			}else {
-				this.mutex.release();
-				this.existSize.release();
 				System.out.println("(X) [NO POP] NO DATA");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		this.mutex.release();
-		this.existSize.release();
 		return p;	
 	}
 

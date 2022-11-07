@@ -1,6 +1,5 @@
 package psp.practicas.practica3;
 
-import psp.practicas.practica3.colario.Cola;
 import psp.practicas.practica3.threads.Th_Reader;
 import psp.practicas.practica3.threads.Th_Writter;
 
@@ -13,15 +12,14 @@ public class Main {
 	 */
 	public static void main(String[] arg){
 		System.out.println("==========SEMAFOROS==========");
-		Cola c  = new Cola(2);
 		Th_Writter[] tw = new Th_Writter[4];
 		Th_Reader[] tr = new Th_Reader[5];
-		
+		Datas data = new Datas(10);
 		for(int i = 0; i < tw.length; i++) {	//Add writer thread to array
-			tw[i] = new Th_Writter(c);
+			tw[i] = new Th_Writter(data);
 		}
 		for(int i = 0; i < tr.length; i++) {	//Add reader thread to array
-			tr[i] = new Th_Reader(c);
+			tr[i] = new Th_Reader(data);
 		}
 		for(int i = 0; i < tr.length; i++) {	//Add reader thread to array
 			tr[i].start();
@@ -34,7 +32,6 @@ public class Main {
 			try {
 				tr[i].join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -42,11 +39,10 @@ public class Main {
 			try {
 				tw[i].join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		c.show();
+		data.getC().show();
 	}
 }

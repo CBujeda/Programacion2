@@ -16,20 +16,20 @@ public class Main {
 		Cola c  = new Cola(2);
 		Th_Writter[] tw = new Th_Writter[4];
 		Th_Reader[] tr = new Th_Reader[5];
-		Semaforo sWritter = new Semaforo(8);
-		Semaforo sReader = new Semaforo(6);
-		Semaforo sMutex = new Semaforo(1);
-		
 		
 		for(int i = 0; i < tw.length; i++) {	//Add writer thread to array
-			tw[i] = new Th_Writter(c,sWritter,sMutex,(i+1));
+			tw[i] = new Th_Writter(c);
 		}
 		for(int i = 0; i < tr.length; i++) {	//Add reader thread to array
-			tr[i] = new Th_Reader(c,sReader,sMutex);
+			tr[i] = new Th_Reader(c);
 		}
 		for(int i = 0; i < tr.length; i++) {	//Add reader thread to array
 			tr[i].start();
 		}
+		for(int i = 0; i < tw.length; i++) {	//Add reader thread to array
+			tw[i].start();
+		}
+		
 		for(int i = 0; i < tr.length; i++) {	//Add reader thread to array
 			try {
 				tr[i].join();
@@ -38,6 +38,15 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		for(int i = 0; i < tw.length; i++) {	//Add reader thread to array
+			try {
+				tw[i].join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		c.show();
 	}
 }

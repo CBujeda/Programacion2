@@ -13,7 +13,8 @@ public class Th_Writter  extends Thread  {
 	private Semaforo existData;
 	private Semaforo existSize;
 	
-	public Th_Writter(Datas data) {
+	public Th_Writter(Datas data,int id) {	//construct data
+		this.id = id;
 		this.c = data.getC();
 		this.existData = data.getExistData();
 		this.existSize = data.getExistSize();
@@ -26,14 +27,14 @@ public class Th_Writter  extends Thread  {
 		System.out.println("Inicio Writter: " + this.id);
 		for(int i = 0; i < 8; i++) {
 			try {
-				this.existSize.acquire();
+				this.existSize.acquire();	//Get ticket
 				this.mutex.acquire();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			c.push(new Node("Id Thred: " + this.id + " Num: " + i));
-			System.out.println("Writter: " + "Id Thred: " + this.id + " Num: " + i);
-			this.mutex.release();
+			c.push(new Node("Id Thred (w):" + this.id + " Num: " + i));
+			System.out.println("Writter: " + "Id Thred (w): " + this.id + " Num: " + i);
+			this.mutex.release();			//Return Ticket
 			this.existData.release();
 		}
 		

@@ -11,7 +11,7 @@ public class Th_Reader  extends Thread  {
 	private Semaforo mutex;
 	private Semaforo existData;
 	private Semaforo existSize;
-	public Th_Reader(Datas data) {
+	public Th_Reader(Datas data) {	// Construct the data
 		this.c = data.getC();
 		this.existData = data.getExistData();
 		this.existSize = data.getExistSize();
@@ -22,11 +22,10 @@ public class Th_Reader  extends Thread  {
 	
 	@Override
 	public void run() {
-
-		System.out.println("Inicio Writter: ?");
+		System.out.println("Inicio Reader: ?");
 		for(int i = 0; i < 6; i++) {
 			try {
-				this.existData.acquire();
+				this.existData.acquire();	//get ticket
 				this.mutex.acquire();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
@@ -34,7 +33,7 @@ public class Th_Reader  extends Thread  {
 			}
 			Node n = c.pop();
 			System.out.println("Reader: " + n.getTexto());
-			this.mutex.release();
+			this.mutex.release();			//return tiket
 			this.existSize.release();
 		}
 	}

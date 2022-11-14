@@ -8,25 +8,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
-
+/**
+ * Objeto con el cual generamos una conexión a mysql
+ *
+ */
 public class SQLS_MySql {
 	
 	final private String user = "root";
 	final private String pass = "root";
 	final private String host = "localhost:3306/alumnos";
 	final private String url = "jdbc:mysql://"+ host + "?useSSL=false";
-	private Connection connect = null;
-	private ResultSet resultSet = null;
 	
 	////---------------------
-	String driver = "com.mysql.jdbc.Driver";
-	
+	String driver = "com.mysql.jdbc.Driver";	// Declaramos driver a usar
+	Connection conn = null;
+	/*
+	 * Pre:
+	 * Post: Método con el cual creamos conexión y mostramos query
+	 */
 	public void makeQuery() {
-		Connection conn = null;
+		
 		try {
 			Class.forName(driver);
-			conn = DriverManager.getConnection(url,user,pass);
-			if(conn != null) {
+			conn = DriverManager.getConnection(url,user,pass);	// Creamos nueva conexión
+			if(conn != null) {									// Conexión exitosa ?
 				System.out.println("Conexion Exitosa");
 				Statement stmt = conn.createStatement();
 				String select = "select a.id_alumno,a.nombre,a.apellido,c.nombre as \"nameC\",c.Descripccion as \"descC\" "
@@ -35,15 +40,16 @@ public class SQLS_MySql {
 				ResultSet rs = stmt.executeQuery(select);
 				System.out.printf("| %-10s | %-10s | %-10s | %-10s  %-32s |%n",
 									"ID","Name","Last Name","Class","Desc Class");
-				while (rs.next()) {
+				while (rs.next()) {								//Recorremos datos
 					long id = rs.getLong("id_alumno");
 					String name = rs.getString("nombre");
 					String lname = rs.getString("apellido");
 					String nameClass = rs.getString("nameC");
 					String descClass = rs.getString("descC");
-					System.out.printf("| %-10s | %-10s | %-10s | %-10s  %-32s |%n"
+					System.out.printf("| %-10s | %-10s | %-10s | %-10s  %-32s |%n"	// Mostramos query
 									  ,id , name , lname, nameClass,descClass);
 				}
+				rs.close();
 			}else {
 				System.out.println("Conexion Fallida");
 			}
@@ -55,12 +61,14 @@ public class SQLS_MySql {
 		}
 	}
 	
-	public void close() {
+	/**
+	 * Pre:
+	 * Post: Método con el cual cerramos conexiones
+	 */
+	public void close() {	//Cerramos conexiones
 		try {
-			if (resultSet != null) {
-				resultSet.close();
-			} if (connect != null) {
-				connect.close();
+			if (conn != null) {
+				conn.close();
 			}
 		} catch (Exception e) {}
 	}

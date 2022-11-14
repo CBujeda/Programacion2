@@ -1,5 +1,12 @@
-CREATE SCHEMA if not exists `alumnos` DEFAULT CHARACTER SET utf8 ;
 
+/*
+Creamos bbdd de alumnos
+*/
+CREATE SCHEMA if not exists `alumnos` DEFAULT CHARACTER SET utf8 ;
+use alumnos;
+/*
+Añadimos tablas alumno y clase
+*/
 CREATE TABLE if not exists `alumnos`.`alumno` (
   `id_alumno` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
@@ -19,12 +26,17 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 commit;
 
+/*
+Añadimos FK
+*/
 ALTER TABLE `alumnos`.`alumno` 
 ADD CONSTRAINT `clase`
   FOREIGN KEY (`id_clase`)
   REFERENCES `alumnos`.`clase` (`id_clase`);
   
-
+/*
+Insertamos Datos de la BBDD
+*/
 INSERT INTO `alumnos`.`clase` (`id_clase`,`Nombre`, `Descripccion`) 
 VALUES 
 (1,'E1ºB', 'Curso 1 de Arqueologia, clase B'),
@@ -42,5 +54,7 @@ values
 select * from `alumnos`.`alumno`;
 commit;
 use alumnos;
-## QUERRY SPECIAL
+/*
+ QUERRY SPECIAL
+ */
 select a.id_alumno,a.nombre,a.apellido,c.nombre as"nameC",c.Descripccion as "descC" from alumno a,clase c where a.id_clase = c.id_clase;

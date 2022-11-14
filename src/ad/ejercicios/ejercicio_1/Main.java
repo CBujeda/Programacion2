@@ -29,8 +29,10 @@ public class Main {
 			String option = sc.nextLine();
 			if(option.equalsIgnoreCase("mysql get alumnos")) {
 				sqmy.makeQuery();								//Hacemos query con mysql 
+				sqmy.close();	//Cerramos conexión
 			}else if(option.equalsIgnoreCase("sqlm get alumnos")){
 				sqmi.makeQuery();								//Hacemos query con Microsoft sql
+				sqmi.close();	//Cerramos conexión
 			}else if(option.equalsIgnoreCase("exit")) {
 				break;											//Rompemos bucle
 			}else if(option.equalsIgnoreCase("?") || option.equalsIgnoreCase("help")){
@@ -39,8 +41,8 @@ public class Main {
 				System.out.println("[?] Sintaxis del comando incomprensible, ecriba ? para help");
 			}
 		}
-		sqmy.close();	//Cerramos conexión
-		sqmi.close();	//Cerramos conexión
+		
+		
 		
 	}
 

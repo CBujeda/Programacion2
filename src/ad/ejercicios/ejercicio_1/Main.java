@@ -4,6 +4,11 @@ import java.util.Scanner;
 
 public class Main {
 
+	/**
+	 * Pre:
+	 * Post: Método con el cual mostramos por pantalla la ayuda
+	 * 		 del programa.
+	 */
 	public static void help() {
 		System.out.println("████████████████████████═════════════════════════════════╗\n"
 						 + "█ Comandos:            █ Info:                           ║\n"
@@ -15,28 +20,27 @@ public class Main {
 	}
 	
 	public static void main(String[] arg) {
-		SQLS_MySql sqmy = new SQLS_MySql();
-		SQLS_Microsoft sqmi = new SQLS_Microsoft();
-		
-		Scanner sc = new Scanner(System.in);
-		help();
+		SQLS_MySql sqmy = new SQLS_MySql();			//Creamos objeto para Mysql Access
+		SQLS_Microsoft sqmi = new SQLS_Microsoft(); //Creamos objeto para Microsoft sql
+		Scanner sc = new Scanner(System.in);		//Lector
+		help();										//Mostramos ayuda
 		while(true) {
 			System.out.print("?> ");
 			String option = sc.nextLine();
 			if(option.equalsIgnoreCase("mysql get alumnos")) {
-				sqmy.makeQuery();
+				sqmy.makeQuery();								//Hacemos query con mysql 
 			}else if(option.equalsIgnoreCase("sqlm get alumnos")){
-				sqmi.makeQuery();
+				sqmi.makeQuery();								//Hacemos query con Microsoft sql
 			}else if(option.equalsIgnoreCase("exit")) {
-				break;
+				break;											//Rompemos bucle
 			}else if(option.equalsIgnoreCase("?") || option.equalsIgnoreCase("help")){
-				help();
+				help();											//Mostramos ayuda
 			}else {
 				System.out.println("[?] Sintaxis del comando incomprensible, ecriba ? para help");
 			}
 		}
-		sqmy.close();
-		sqmi.close();
+		sqmy.close();	//Cerramos conexión
+		sqmi.close();	//Cerramos conexión
 		
 	}
 

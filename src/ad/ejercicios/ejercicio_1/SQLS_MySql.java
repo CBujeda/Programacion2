@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 
 
 public class SQLS_MySql {
-
-	
 	
 	final private String user = "root";
 	final private String pass = "root";
@@ -19,7 +17,6 @@ public class SQLS_MySql {
 	final private String url = "jdbc:mysql://"+ host + "?useSSL=false";
 	private Connection connect = null;
 	private ResultSet resultSet = null;
-	private PreparedStatement preparedStatement = null;
 	
 	////---------------------
 	String driver = "com.mysql.jdbc.Driver";

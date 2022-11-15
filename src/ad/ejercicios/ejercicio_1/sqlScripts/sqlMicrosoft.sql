@@ -53,7 +53,10 @@ go
 select * from alumno;
 go
 select * from clase;
-/*Commit puede fallar*/
+/*Commit puede fallar si tienes el autocommit activado o
+	la configuración del server incorrecta
+*/
+go
 commit;
-
+go
 select a.id_alumno,a.nombre,a.apellido,c.nombre as"nameC",c.Descripccion as "descC" from alumno a,clase c where a.id_clase = c.id_clase;

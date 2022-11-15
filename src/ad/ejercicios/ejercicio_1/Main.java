@@ -2,6 +2,9 @@ package ad.ejercicios.ejercicio_1;
 
 import java.util.Scanner;
 
+/*
+ * Programa java en el cual podremos conectar a diferentes bbdd
+ */
 public class Main {
 
 	/**
@@ -19,6 +22,10 @@ public class Main {
 						 + "████████████████████████═════════════════════════════════╝\n");
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Main del programa
+	 */
 	public static void main(String[] arg) {
 		SQLS_MySql sqmy = new SQLS_MySql();			//Creamos objeto para Mysql Access
 		SQLS_Microsoft sqmi = new SQLS_Microsoft(); //Creamos objeto para Microsoft sql

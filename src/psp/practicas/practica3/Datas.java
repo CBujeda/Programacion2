@@ -1,7 +1,9 @@
 package psp.practicas.practica3;
 
 import psp.practicas.practica3.colario.Cola;
-
+/*
+ * Objeto el cual guarda datos y objetos
+ */
 public class Datas {
 	
 	private Semaforo mutex;
@@ -10,10 +12,10 @@ public class Datas {
 	private Cola c;
 	public Datas(int size) {
 		super();
-		this.mutex = new Semaforo(1,true);
-		this.existData = new Semaforo (0,true);
-		this.existSize = new Semaforo(size,true);
-		this.c = new Cola(size);
+		this.mutex = new Semaforo(1,true);			//Semáforo de 'permiso'
+		this.existData = new Semaforo (0,true);		//Semáforo el cual dicta las existences
+		this.existSize = new Semaforo(size,true);	//Semáforo el cual guarda los espacios disponibles
+		this.c = new Cola(size);					//Cola
 	}
 	public Semaforo getMutex() {
 		return mutex;

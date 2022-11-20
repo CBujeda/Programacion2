@@ -4,7 +4,9 @@ import psp.practicas.practica3.Datas;
 import psp.practicas.practica3.Semaforo;
 import psp.practicas.practica3.colario.Cola;
 import psp.practicas.practica3.colario.Node;
-
+/*
+ * Objeto thread el cual lee datos de la cola
+ */
 public class Th_Reader  extends Thread  {
 
 	private Cola c;
@@ -19,7 +21,9 @@ public class Th_Reader  extends Thread  {
 	}
 
 	
-	
+	/*
+	 * RUN
+	 */
 	@Override
 	public void run() {
 		System.out.println("Inicio Reader: ?");
@@ -33,7 +37,7 @@ public class Th_Reader  extends Thread  {
 			}
 			Node n = c.pop();
 			System.out.println("Reader: " + n.getTexto());
-			this.mutex.release();			//return tiket
+			this.mutex.release();			//return ticket
 			this.existSize.release();
 		}
 	}

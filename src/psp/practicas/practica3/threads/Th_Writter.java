@@ -4,7 +4,9 @@ import psp.practicas.practica3.Datas;
 import psp.practicas.practica3.Semaforo;
 import psp.practicas.practica3.colario.Cola;
 import psp.practicas.practica3.colario.Node;
-
+/*
+ * Objeto thread el cual escribe en la cola.
+ */
 public class Th_Writter  extends Thread  {
 
 	private Cola c;
@@ -21,7 +23,9 @@ public class Th_Writter  extends Thread  {
 		this.mutex = data.getMutex();
 	}
 
-	
+	/*
+	 * RUN
+	 */
 	@Override
 	public void run() {
 		System.out.println("Inicio Writter: " + this.id);
@@ -32,12 +36,10 @@ public class Th_Writter  extends Thread  {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			c.push(new Node("Id Thred (w):" + this.id + " Num: " + i));
-			System.out.println("Writter: " + "Id Thred (w): " + this.id + " Num: " + i);
+			c.push(new Node("Id Thread (w):" + this.id + " Num: " + i));
+			System.out.println("Writer: " + "Id Thred (w): " + this.id + " Num: " + i);
 			this.mutex.release();			//Return Ticket
 			this.existData.release();
 		}
-		
-		
 	}   
 }

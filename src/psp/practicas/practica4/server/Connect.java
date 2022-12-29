@@ -39,17 +39,22 @@ public class Connect extends Thread {
             write(out,"-----------------------");
             write(out,"INICIO COMPRA:Cliente " + this.idClient);
             System.out.println("INICIO COMPRA:Cliente " + this.idClient);
+            String mensaje = "";
         	while(true) {
 	            //Se le envía un mensaje al cliente usando su flujo de salida
         		
         		write(out,"BIENVENIDO AL SERVICIO");
-        		write(out,"PLAZAS DISPONIBLES: ");
-        		write(out,dt.getplazStr() + "" + dt.getplazOcupStr());
-        		//write(out,"Petición recibida y aceptada");
-        		
-        		String mensaje = cinput(out,in);
-                System.out.println("Mensaje recibido -> " + mensaje);
-	           
+        		while(true) {
+	        		write(out,"PLAZAS DISPONIBLES: ");
+	        		write(out,dt.getplazStr() + "" + dt.getplazOcupStr());
+	        		//write(out,"Petición recibida y aceptada");
+	        		
+	        		mensaje = cinput(out,in);
+	                System.out.println("Mensaje recibido -> " + mensaje);
+	                
+	                
+	                break;
+        		}
 	            
 	            if(mensaje.equalsIgnoreCase("exit")) {
 	            	System.out.println("Fin de la conexión");

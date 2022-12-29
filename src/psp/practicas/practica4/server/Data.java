@@ -18,7 +18,7 @@ public class Data {
 		}
 	}
 	
-	public String getplazStr() {
+	public synchronized String getplazStr() {	// Usar semaforos
 		String dt = "\n";
 		for(int i = 0; i < plaz.size();i++) {	
 			for(int e = 0; e < plaz.get(i).length; e++) {
@@ -29,7 +29,7 @@ public class Data {
 		return dt;
 	}
 	
-	public String getplazOcupStr() {
+	public synchronized String getplazOcupStr() { // Usar semaforos
 		String dt = "\n";
 		for(int i = 0; i < plaz.size();i++) {	
 			for(int e = 0; e < plaz.get(i).length; e++) {
@@ -42,8 +42,10 @@ public class Data {
 			dt = dt + "\n";
 		}
 		return dt;
-		
 	}
 	
+	public void isDisponible(String f) {
+
+	}
 	
 }

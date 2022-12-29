@@ -26,6 +26,16 @@ public class Plaza {
 			this.reserved = true;
 		}
 	}
+	
+	public boolean isDisponible(String f) {
+		if(getPlaza().equalsIgnoreCase(f) && reserved == false) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	
 	public String getPlaza() {
 		return getFila() + getColumn(); 
 	}

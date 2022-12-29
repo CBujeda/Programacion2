@@ -43,7 +43,7 @@ public class Server extends Conexion  {
 	}
 	
 	public void createConexion() {
-		this.lc.add(new Connect(this.ss, this.cs,maxID));
+		this.lc.add(new Connect(this.ss, this.cs,maxID,dt));
 		this.lc.get(this.lc.size()-1).start();
 	}
 	

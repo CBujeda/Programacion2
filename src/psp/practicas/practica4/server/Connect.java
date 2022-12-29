@@ -13,10 +13,12 @@ public class Connect extends Thread {
 	private boolean ocupated;
 	private boolean finalizated;
 	private int idClient;
-	public Connect(ServerSocket ss, Socket cs,int maxID) {
+	private Data dt;
+	public Connect(ServerSocket ss, Socket cs,int maxID,Data dt) {
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
+		this.dt = dt;
 	}
 
 	@Override
@@ -36,9 +38,14 @@ public class Connect extends Thread {
             write(out,"Conexion establecida");
             write(out,"-----------------------");
             write(out,"INICIO COMPRA:Cliente " + this.idClient);
+            System.out.println("INICIO COMPRA:Cliente " + this.idClient);
         	while(true) {
 	            //Se le envía un mensaje al cliente usando su flujo de salida
-        		write(out,"Petición recibida y aceptada");
+        		
+        		write(out,"BIENVENIDO AL SERVICIO");
+        		write(out,"PLAZAS DISPONIBLES: ");
+        		write(out,dt.getplazStr() + "" + dt.getplazOcupStr());
+        		//write(out,"Petición recibida y aceptada");
         		
         		String mensaje = cinput(out,in);
                 System.out.println("Mensaje recibido -> " + mensaje);
@@ -63,7 +70,7 @@ public class Connect extends Thread {
 		return read(in);
 	}
 	
-	private String read(DataInputStream in) {
+	private String read(DataInputStream in) {	// Mejorar
 		try {
 			return in.readUTF();
 		} catch (IOException e) {
@@ -88,7 +95,7 @@ public class Connect extends Thread {
 			System.out.println("Fallo al escribir datos, Rompiendo conexion | Client: " + this.idClient);
 			e.printStackTrace();
 			this.finalizated = true;
-			this.stop();
+			this.stop();	// Revisar error al petar cliente
 		}
         
 	}

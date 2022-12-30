@@ -26,6 +26,7 @@ public class Connect extends Thread {
 		//super.run();
 		this.ocupated = false;
 		this.finalizated = false;
+		int plazas = 0;
 		try {
 			System.out.println("Esperando..."); //Esperando conexión
             cs = ss.accept(); //Accept comienza el socket y espera una conexión desde un cliente
@@ -44,24 +45,47 @@ public class Connect extends Thread {
 	            //Se le envía un mensaje al cliente usando su flujo de salida
         		
         		write(out,"BIENVENIDO AL SERVICIO");
-        		while(true) {
-	        		write(out,"PLAZAS DISPONIBLES: ");
-	        		write(out,dt.getplazStr() + "" + dt.getplazOcupStr());
-	        		//write(out,"Petición recibida y aceptada");
-	        		
+        		if(dt.totalOcupated()) {
+        			write(out,"VUELO COMPLETO");
+        			closeConexion(out,cs);
+        			break;
+        		}else {
+	        		while(true) {
+		        		write(out,"PLAZAS DISPONIBLES: ");
+		        		write(out,dt.getplazStr() + "" + dt.getplazOcupStr());
+		        		//write(out,"Petición recibida y aceptada");
+		        		
+		        		mensaje = cinput(out,in);
+		        		int response = dt.isReservada(mensaje);
+		        		if(response == 0) {
+		        			write(out,"Reservando plaza...");
+		        			boolean very = dt.reservar(mensaje);
+		        			if(very) {
+		        				write(out,"Plaza "+mensaje+" reservada correctamente");
+		        				plazas++;
+		        			}else {
+		        				write(out,"[ERROR] - > Se produjo un error al reservar una plaza");
+		        			}
+		        			break;
+		        		}else if(response == 1) {
+		        			write(out,"La plaza " + mensaje +" esta ocupada.");
+		        			write(out,dt.getplazOcupStr());
+		        			
+		        		}else if(response == -1) {
+		        			write(out,"La plaza " + mensaje +" no existe");
+		        		}
+		        		
+		                System.out.println("Mensaje recibido -> " + mensaje);
+	
+	        		}
+	        		write(out,"Reservas: " + plazas + " CLIENTE: " + this.idClient);
+	        		write(out,"Desea reservar otra plaza? S/N");
 	        		mensaje = cinput(out,in);
-	                System.out.println("Mensaje recibido -> " + mensaje);
-	                
-	                
-	                break;
+	        		if(mensaje.equalsIgnoreCase("N")) {
+	        			closeConexion(out,cs);
+	        			break;
+	        		}
         		}
-	            
-	            if(mensaje.equalsIgnoreCase("exit")) {
-	            	System.out.println("Fin de la conexión");
-	            	cs.close();
-	            	this.finalizated = true;
-	            	break;
-	            }
 	            
         	}
         }
@@ -70,8 +94,21 @@ public class Connect extends Thread {
         }
 	}
 	
+	private void closeConexion(DataOutputStream out,Socket cs) {
+		close(out);
+		System.out.println("Fin de la conexión");
+    	try {
+			cs.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	this.finalizated = true;
+    	
+	}
+	
 	private String cinput(DataOutputStream out,DataInputStream in) {
-		write(out,"input","D");
+		write(out,"input","I");
 		return read(in);
 	}
 	
@@ -87,7 +124,9 @@ public class Connect extends Thread {
 		}
 		
 	}
-	
+	private void close(DataOutputStream out) {
+		write(out,"close","C");
+	}
 
 	
 	private void write(DataOutputStream out,String msg) { write(out,"msg",msg);}

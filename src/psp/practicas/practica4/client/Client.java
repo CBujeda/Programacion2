@@ -10,6 +10,10 @@ import psp.practicas.practica4.Conexion;
 
 
 public class Client extends Conexion  {
+	
+	/*CONFIG*/
+	
+	private boolean colors = true;
 
 	public Client() throws IOException {
 		super(false);
@@ -33,12 +37,16 @@ public class Client extends Conexion  {
 		            		if(dsmsg[0].equalsIgnoreCase("input")) {
 		            			cmsg = write(sc, out);
 		            		}else if(dsmsg[0].equalsIgnoreCase("msg")) {
-		            			System.out.println("[SERVER] > " + dsmsg[1]);
-		            			
+		            			if(this.colors) {
+		            				System.out.print("\033[1;36m");
+		            			}
+		            			System.out.println("[SERVER] > " + dsmsg[1]);	
+		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {
+		            			cs.close();
 		            		}
 		            	}
 		            }
-		            if(cmsg.equalsIgnoreCase("exit")) {
+		            if(cmsg.equalsIgnoreCase("exit") ) {
 		            	cs.close();
 		            }
 		            
@@ -52,7 +60,13 @@ public class Client extends Conexion  {
 	    }
 	 
 	 	public String write(Scanner sc,DataOutputStream out) {
+	 		if(this.colors) {
+	 			System.out.print("\033[1;33m");
+	 		}
 	 		System.out.print("[CLIENT] > ");
+	 		if(this.colors) {
+	 			System.out.print("\033[1;32m");
+	 		}
             try {
             	String w = sc.nextLine();
 				out.writeUTF(w);

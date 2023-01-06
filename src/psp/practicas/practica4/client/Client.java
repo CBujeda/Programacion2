@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import psp.practicas.practica4.Conexion;
+import psp.practicas.practica4.Config;
 
 
 
-public class Client extends Conexion  {
+public class Client extends Conexion implements Config  {
 	
 	/*CONFIG*/
 	
-	private boolean colors = true;
+	//private boolean colors = true;
 
 	public Client() throws IOException {
 		super(false);
@@ -37,7 +38,7 @@ public class Client extends Conexion  {
 		            		if(dsmsg[0].equalsIgnoreCase("input")) {
 		            			cmsg = write(sc, out);
 		            		}else if(dsmsg[0].equalsIgnoreCase("msg")) {
-		            			if(this.colors) {
+		            			if(Config.colors) {
 		            				System.out.print("\033[1;36m");
 		            			}
 		            			System.out.println("[SERVER] > " + dsmsg[1]);	
@@ -60,11 +61,11 @@ public class Client extends Conexion  {
 	    }
 	 
 	 	public String write(Scanner sc,DataOutputStream out) {
-	 		if(this.colors) {
+	 		if(Config.colors) {
 	 			System.out.print("\033[1;33m");
 	 		}
 	 		System.out.print("[CLIENT] > ");
-	 		if(this.colors) {
+	 		if(Config.colors) {
 	 			System.out.print("\033[1;32m");
 	 		}
             try {

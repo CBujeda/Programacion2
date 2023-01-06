@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Connect extends Thread {
+import psp.practicas.practica4.Config;
+
+public class Connect extends Thread implements Config {
 
 	private ServerSocket ss; 
 	protected Socket cs;
@@ -28,18 +30,18 @@ public class Connect extends Thread {
 		this.finalizated = false;
 		int plazas = 0;
 		try {
-			System.out.println("Esperando..."); //Esperando conexión
+			info("Esperando..."); //Esperando conexión
             cs = ss.accept(); //Accept comienza el socket y espera una conexión desde un cliente
             
             this.ocupated = true;
-            System.out.println("Cliente en línea");
+            info("Cliente en línea");
         	
             DataInputStream in = new DataInputStream(cs.getInputStream());
             DataOutputStream out = new DataOutputStream(cs.getOutputStream());
             write(out,"Conexion establecida");
             write(out,"-----------------------");
             write(out,"INICIO COMPRA:Cliente " + this.idClient);
-            System.out.println("INICIO COMPRA:Cliente " + this.idClient);
+            info("INICIO COMPRA:Cliente " + this.idClient);
             String mensaje = "";
         	while(true) {
 	            //Se le envía un mensaje al cliente usando su flujo de salida
@@ -74,9 +76,6 @@ public class Connect extends Thread {
 		        		}else if(response == -1) {
 		        			write(out,"La plaza " + mensaje +" no existe");
 		        		}
-		        		
-		                System.out.println("Mensaje recibido -> " + mensaje);
-	
 	        		}
 	        		write(out,"Reservas: " + plazas + " CLIENTE: " + this.idClient);
 	        		write(out,"Desea reservar otra plaza? S/N");
@@ -94,9 +93,24 @@ public class Connect extends Thread {
         }
 	}
 	
+	private void info(String txt) {
+		if(Config.colors) {
+			System.out.print("\033[1;32m");
+		}
+		System.out.print("[INFO] ID{"+this.idClient+"}");
+		if(Config.colors) {
+			System.out.print("\033[1;35m");
+		}
+		System.out.print("-> ");
+		if(Config.colors) {
+			System.out.print("\033[1;37m");
+		}
+		System.out.println(txt);
+	}
+	
 	private void closeConexion(DataOutputStream out,Socket cs) {
 		close(out);
-		System.out.println("Fin de la conexión");
+		info("Fin de la conexión");
     	try {
 			cs.close();
 		} catch (IOException e) {

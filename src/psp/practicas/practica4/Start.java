@@ -1,6 +1,8 @@
 package psp.practicas.practica4;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import psp.practicas.practica4.client.MainClient;
@@ -10,9 +12,18 @@ public class Start {
 
 	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
+		
+		List<String> list = Arrays.asList(args);
+        
+        
 		while(true) {
-			System.out.print("Iniciar: ");
-			String dt = sc.nextLine();
+			String dt = "";
+			if(args.length > 0) {
+				dt = args[0];
+			}else {
+				System.out.print("Iniciar: ");
+				dt = sc.nextLine();
+			}
 			if(dt.equalsIgnoreCase("s")) {
 				MainServer.main(args);
 				break;

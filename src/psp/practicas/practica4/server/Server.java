@@ -15,11 +15,12 @@ public class Server extends Conexion  {
 	
 	public Server() throws IOException {
 		super(true);
-		
 		dt = new Data();
-		
 	}
-	
+	/**
+	 * Pre: 
+	 * Post: Metodo el cual inicia el servidor
+	 */
 	public void startServer() {
 		System.out.println(dt.getplazStr());
 		System.out.println(dt.getplazOcupStr());
@@ -37,15 +38,18 @@ public class Server extends Conexion  {
 					lc.remove(i);
 				}
 			}
-			
-			
 		}
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual añade una conexion
+	 */
 	public void createConexion() {
 		this.lc.add(new Connect(this.ss, this.cs,maxID,dt));
 		this.lc.get(this.lc.size()-1).start();
 	}
 	
+	// DEPRECATED
 	public void connect() {}
 }

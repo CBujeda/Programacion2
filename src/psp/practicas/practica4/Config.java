@@ -1,6 +1,11 @@
 package psp.practicas.practica4;
 
 public interface Config {
-
-	public boolean colors = true;
+	/**
+	 * Interfaz de configuración
+	 */
+	
+	// -------------- ESTILOS----------------
+	
+	public boolean colors = true;			// False = Disable colors / True = Enable colors
 }

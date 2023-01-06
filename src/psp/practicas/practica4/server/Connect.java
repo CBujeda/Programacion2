@@ -23,6 +23,10 @@ public class Connect extends Thread implements Config {
 		this.dt = dt;
 	}
 
+	/**
+	 * Pre:
+	 * Post: Metodo el cual genera una nueva conexion
+	 */
 	@Override
 	public void run() {
 		//super.run();
@@ -85,7 +89,6 @@ public class Connect extends Thread implements Config {
 	        			break;
 	        		}
         		}
-	            
         	}
         }
         catch (Exception e) {
@@ -93,6 +96,10 @@ public class Connect extends Thread implements Config {
         }
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Mensaje de texto
+	 */
 	private void info(String txt) {
 		if(Config.colors) {
 			System.out.print("\033[1;32m");
@@ -108,6 +115,10 @@ public class Connect extends Thread implements Config {
 		System.out.println(txt);
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Cerrar conexion
+	 */
 	private void closeConexion(DataOutputStream out,Socket cs) {
 		close(out);
 		info("Fin de la conexión");
@@ -121,11 +132,19 @@ public class Connect extends Thread implements Config {
     	
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual indica al cliente que se espera una entrada
+	 */
 	private String cinput(DataOutputStream out,DataInputStream in) {
 		write(out,"input","I");
 		return read(in);
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual espera una lectura
+	 */
 	private String read(DataInputStream in) {	// Mejorar
 		try {
 			return in.readUTF();
@@ -135,14 +154,21 @@ public class Connect extends Thread implements Config {
 			this.finalizated = true;
 			this.stop();
 			return "error";
-		}
-		
+		}	
 	}
+	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual indica al cliente terminar la conexion
+	 */
 	private void close(DataOutputStream out) {
 		write(out,"close","C");
 	}
 
-	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual envia un mensaje al cliente, se le puede indicar tipo
+	 */
 	private void write(DataOutputStream out,String msg) { write(out,"msg",msg);}
 	private void write(DataOutputStream out,String type,String msg) {
 		try {
@@ -165,8 +191,10 @@ public class Connect extends Thread implements Config {
 	}
 	
 
-
-	public synchronized boolean isOcupated() { 	// Reahacer con semaforos
+	/*
+	 * Metodos de verificacion
+	 */
+	public synchronized boolean isOcupated() { 
 		return this.ocupated;
 	}
 

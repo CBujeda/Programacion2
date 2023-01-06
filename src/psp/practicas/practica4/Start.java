@@ -10,6 +10,14 @@ import psp.practicas.practica4.server.MainServer;
 
 public class Start {
 
+	/**
+	 * Pre:
+	 * Post: Metodo de inicio con opciones
+	 * 
+	 * Si se ejecuta con parametros EX:
+	 * 		1 	java -jar aeropuerto.jar s		// Ejecuta servidor
+	 *  	2 	java -jar aeropuerto.jar c		// Ejecuta cliente
+	 */
 	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
 		

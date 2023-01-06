@@ -15,19 +15,16 @@ public class Start {
 	 * Post: Metodo de inicio con opciones
 	 * 
 	 * Si se ejecuta con parametros EX:
-	 * 		1 	java -jar aeropuerto.jar s		// Ejecuta servidor
-	 *  	2 	java -jar aeropuerto.jar c		// Ejecuta cliente
+	 * 		1| 	java -jar aeropuerto.jar s		// Ejecuta servidor
+	 *  	2| 	java -jar aeropuerto.jar c		// Ejecuta cliente
 	 */
 	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
-		
-		List<String> list = Arrays.asList(args);
-        
-        
+		//List<String> list = Arrays.asList(args);		// Obtenemos argumentos (Opcional)       
 		while(true) {
 			String dt = "";
 			if(args.length > 0) {
-				dt = args[0];
+				dt = args[0];	// obtenemos argumentos
 			}else {
 				System.out.print("Iniciar: ");
 				dt = sc.nextLine();
@@ -39,7 +36,7 @@ public class Start {
 				MainClient.main(args);
 				break;
 			}else if(dt.equalsIgnoreCase("exit")){
-				
+				break;
 			}else{
 				System.out.println("Comando invalido");
 			}

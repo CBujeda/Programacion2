@@ -31,10 +31,13 @@ public class Data {
 			}
 		}
 	}
+	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual obtienes las plazas como string
+	 */
 	//synchronized
 	public String getplazStr() {
-		
-		
 		try {
 			this.s_getPlazStr.acquire();
 		} catch (InterruptedException e1) {
@@ -51,8 +54,13 @@ public class Data {
 		return dt;
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual obtienes las plazas
+	 * 		 en estilo ocupadas en string
+	 */
 	//synchronized
-	public  String getplazOcupStr() { // Usar semaforos
+	public  String getplazOcupStr() {
 		try {
 			this.s_getPlazOcup.acquire();
 		} catch (InterruptedException e1) {
@@ -74,6 +82,11 @@ public class Data {
 		this.s_getPlazOcup.release();
 		return dt;
 	}
+	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual reservas una plaza
+	 */
 	//synchronized
 	public boolean reservar(String f) {
 		try {
@@ -97,16 +110,20 @@ public class Data {
 		return false;
 		
 	}
+	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual se verifica si una plaza
+	 * 		 ya esta reservada
+	 */
 	//synchronized
 	public int isReservada(String f) {
-		
 		try {
 			this.s_IsReservada.acquire();
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		boolean reserved = false;
 		boolean exists = false;
 		for(int i = 0; i < plaz.size();i++) {	
@@ -134,6 +151,11 @@ public class Data {
 		
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual retorna si estan todas las plazas
+	 * 		 ocupadas
+	 */
 	public synchronized boolean totalOcupated() {
 		if(totalPlaz == actualOcup) {
 			return true;

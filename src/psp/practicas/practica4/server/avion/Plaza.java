@@ -19,7 +19,10 @@ public class Plaza {
 		this.column = column;
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	/**
+	 * Asignamos una plaza a un cliente
+	 */
 	public void asiggned(int clientID) {
 		if(this.clientID == -1) {
 			this.clientID = clientID;
@@ -27,6 +30,10 @@ public class Plaza {
 		}
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Verificamos si una plaza esta disponible
+	 */
 	public boolean isDisponible(String f) {
 		if(getPlaza().equalsIgnoreCase(f) && reserved == false) {
 			return true;
@@ -36,10 +43,18 @@ public class Plaza {
 		
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Obtenemos la plaza como string
+	 */
 	public String getPlaza() {
 		return getFila() + getColumn(); 
 	}
 	
+	/**
+	 * Pre:
+	 * Post: Metodo con el cual obtenemos fila
+	 */
 	public String getFila() {
 		if(this.fila >=0 || this.fila < 4) {
 			return fila+1 + "";
@@ -48,7 +63,12 @@ public class Plaza {
 		}
 		
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual traduce la columna
+	 * 		 a lenguaje humano y la devuelve
+	 */
 	public String getColumn() {
 		if(column >=0 || column < 4) {
 			String[] dt = {"A","B","C","D"};
@@ -59,10 +79,18 @@ public class Plaza {
 		
 	}
 
+	/*
+	 * Pre:
+	 * Post: Verifica que este reservada
+	 */
 	public boolean isReserved() {
 		return reserved;
 	}
 
+	/**
+	 * Pre:
+	 * Post: Establece una reserva
+	 */
 	public void setReserved(boolean reserved) {
 		this.reserved = reserved;
 	}

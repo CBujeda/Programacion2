@@ -34,7 +34,6 @@ public class Connect extends Thread implements Config {
 		//super.run();
 		this.ocupated = false;
 		this.finalizated = false;
-		int plazas = 0;
 		try {
 			info("Esperando..."); //Esperando conexión
             cs = ss.accept(); //Accept comienza el socket y espera una conexión desde un cliente
@@ -52,16 +51,39 @@ public class Connect extends Thread implements Config {
         	while(true) {
 	            //Se le envía un mensaje al cliente usando su flujo de salida
         		
-        		write(out,"BIENVENIDO AL SERVICIO");
+        		write(out,"Linea de comandos:");
 	        		while(true) {
-		        		write(out,"PLAZAS DISPONIBLES: ");
-		        		//write(out,"Petición recibida y aceptada");
-		        		
+		        		write(out,"------Commands------\n"
+		        				+ "● PostNote (PN / [\"\",\"\"])\n"
+		        				+ "● RemoveNote (RN / [\"\",\"\"])\n"
+		        				+ "● ReadNote (ReadN / [\"\",\"\"]): ");
 		        		mensaje = cinput(out,in);
-		        		break;
+		        		System.out.println(mensaje);
+		        		String[] dt = mensaje.split("/");
+		        		if(dt.length == 2) {
+		        			String dta = dt[1].replaceAll("\"", "");
+		        			dta = dta.replaceAll("\\[", "");
+		        			dta = dta.replaceAll("\\]", "");
+		        			String[] dta2 = dta.split(",");
+		        			if(dta2.length <= 6) {
+		        				for(int i = 0; i < dta2.length;i++) {
+		        					info(dta2[i]);
+		        				}
+		        				
+		        				break;
+		        			}else {
+		        				write(out,"Se han excedido el limite");
+		        			}
+		        			
+		        			
+		        		}else {
+		        			write(out,"Comando invalido");
+		        		}
+		        		
+		        		
+		        		
 	        		}
-	        		write(out,"Reservas: " + plazas + " CLIENTE: " + this.idClient);
-	        		write(out,"Desea reservar otra plaza? S/N");
+	        		write(out,"Desea guardar otra nota? S/N");
 	        		mensaje = cinput(out,in);
 	        		if(mensaje.equalsIgnoreCase("N")) {
 	        			closeConexion(out,cs);

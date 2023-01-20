@@ -1,6 +1,8 @@
 package psp.practicas.practica5.cliente;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 
 public class MainClient {
 

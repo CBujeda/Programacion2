@@ -49,8 +49,6 @@ public class Client implements Config {
 		            if(cmsg.equalsIgnoreCase("exit") ) {
 		            	cs.close();
 		            }
-		            
-		            
 	        	}
 	        	
 	        }

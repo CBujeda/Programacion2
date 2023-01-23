@@ -59,19 +59,20 @@ public class Connect extends Thread implements Config {
 					if (dt.length == 2) {
 						String dta = dt[1].replaceAll("\"", "");
 						dta = dta.replaceAll("\\[", "");
-						dta = dta.replaceAll("\\]", "");
+						dta = dta.replaceAll("\\]", "");	// Eliminamos formato
 						String[] dta2 = dta.split(",");
 						if (dta2.length <= 6) {
 							for (int i = 0; i < dta2.length; i++) {
 								info(dta2[i]);
 							}
 							String result = "NO DATA";
-							if (dta2.length <= 3) {
-								result = clientSDActuator(Config.portSD1, dt[0], dta);
+							if (dta2.length <= 3) {	// Servidores 1 / 12
+								
+								result = clientSDActuator(Config.portSD1, dt[0], dta);	
 								result = clientSDActuator(Config.portSD12, dt[0], dta);
-							} else if (dta2.length <= 5) {
+							} else if (dta2.length <= 5) {	//Servers 2
 								result = clientSDActuator(Config.portSD2, dt[0], dta);
-							} else if (dta2.length <= 6) {
+							} else if (dta2.length <= 6) {	// Servers 3
 								result = clientSDActuator(Config.portSD3, dt[0], dta);
 							}
 							System.out.println(result);
@@ -86,7 +87,7 @@ public class Connect extends Thread implements Config {
 					}
 
 				}
-				write(out, "Desea guardar otra nota? S/N");
+				write(out, "Desea enviar otro comando de nota? S/N");
 				mensaje = cinput(out, in);
 				if (mensaje.equalsIgnoreCase("N")) {
 					closeConexion(out, cs);

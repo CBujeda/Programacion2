@@ -18,6 +18,11 @@ public class ConnectSD extends Thread implements Config {
 	private boolean ocupated;
 	private boolean finalizated;
 	private int idClient;
+	/*
+	 * Letras a verificar
+	 */
+	private String[] leters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+			"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
 	public ConnectSD(ServerSocket ss, Socket cs, int maxID) {
 		this.ss = ss;
@@ -55,39 +60,102 @@ public class ConnectSD extends Thread implements Config {
 				System.out.println(command);
 				String[] cdta = command.split("/");
 				if (cdta.length == 2) {
-
 					String codta = cdta[0];
 					codta = codta.replaceAll(" ", "");
 					String dtdta = cdta[1];
 					String[] dtdtaSp = dtdta.split(",");
 					System.out.println(codta);
 					// tp.add(new Tupla(dtdtaSp));
+					// Dicho if controla todo lo que tiene que ver con PN (Insert Note)
 					if (codta.equalsIgnoreCase("PN")) {
 						tp.add(new Tupla(dtdtaSp));
 						mensaje = "Inserccion exitosa";
+						
+					// Dicho if controla todo lo que tiene que ver con RN (Remove Note)
 					} else if (codta.equalsIgnoreCase("RN")) {
 						for (int i = 0; i < tp.size(); i++) {
 							boolean equals = true;
 							String[] tupla = tp.get(i).getData();
 							if (tupla.length == dtdtaSp.length) {
 								for (int b = 0; b < tupla.length; b++) {
-									if (!tupla[b].replaceAll(" ", "")
-											.equalsIgnoreCase(dtdtaSp[b].replaceAll(" ", ""))) {
-										equals = false;
+									boolean isIngnore = false;
+									// Ingnoramos los que sean ?A - ?Z
+									for (int l = 0; l < this.leters.length; l++) {
+										String varIngnore = "?" + this.leters[l];
+										if (varIngnore.equals(dtdtaSp[b].replaceAll(" ", ""))) {
+											isIngnore = true;
+										}
+									}
+									if (!isIngnore) {
+										// Filtramos datos
+										if (!tupla[b].replaceAll(" ", "")
+												.equalsIgnoreCase(dtdtaSp[b].replaceAll(" ", ""))) {
+											equals = false;
+										}
 									}
 								}
 							} else {
 								equals = false;
+								mensaje = "No se ha encontrado la tupla: " + dtdta;
 							}
 							if (equals == true) {
 								tp.remove(i);
 								mensaje = "Se ha eliminado la tupla: " + dtdta;
 								break;
-
 							}
 						}
 
+					// Dicho if controla todo lo que tiene que ver con ReadN (Read Note)
+					}else if(codta.equalsIgnoreCase("ReadN")) {
+						System.out.println("Entra a readn");
+						for (int i = 0; i < tp.size(); i++) {	// Comparamos todos los datos
+							boolean equals = true;
+							String[] tupla = tp.get(i).getData();
+							if (tupla.length == dtdtaSp.length) {
+								for (int b = 0; b < tupla.length; b++) {
+									boolean isIngnore = false;
+									// Ingnoramos los que sean ?A - ?Z
+									for (int l = 0; l < this.leters.length; l++) {
+										String varIngnore = "?" + this.leters[l];
+										if (varIngnore.equals(dtdtaSp[b].replaceAll(" ", ""))) {
+											System.out.println("Encontrado" + varIngnore);
+											isIngnore = true;
+										}
+									}
+									// SI no es ?A - ?Z filtramos
+									if (!isIngnore) {
+										// Filtramos
+										if (!tupla[b].replaceAll(" ", "")
+												.equalsIgnoreCase(dtdtaSp[b].replaceAll(" ", ""))) {
+											equals = false;
+										}
+									}
+								}
+							} else {
+								equals = false;
+								mensaje = "No se encontro la busqueda";
+							}
+							if (equals == true) {
+								// Maquetamos los datos
+								String data = "[";
+								for(int d = 0; d < tp.get(i).getData().length;d++) {
+									data = data + tp.get(i).getData()[d];
+									if(d < tp.get(i).getData().length-1) {
+										data = data + ",";
+									}
+								}
+								data = data + "]";
+								// Enviamos el resultado
+								mensaje = "Se ha encontrado el siguiente mensaje: \n "
+										+ "		> " + data ;
+								break;
+
+							}
+						}
 					}
+					
+					
+					
 					for (int i = 0; i < dtdtaSp.length; i++) {
 						System.out.println(dtdtaSp[i]);
 					}

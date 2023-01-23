@@ -49,4 +49,8 @@ public class Linda implements Config{
 		this.lc.add(new Connect(this.ss, this.cs,maxID));
 		this.lc.get(this.lc.size()-1).start();
 	}
+
+	public void getDataConnect() {
+		
+	}
 }

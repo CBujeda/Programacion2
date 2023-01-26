@@ -76,6 +76,11 @@ public class Connect extends Thread implements Config {
 								result = clientSDActuator(Config.portSD3, dt[0], dta);
 							}
 							System.out.println(result);
+							if(result.equalsIgnoreCase("error")) {
+								result = "Ha ocurrido un error en el servidor, "
+										+ "Se esta realizando copia de seguridad"
+										+ "\n Sentimos las molestias";
+							}
 							write(out, result);
 							break;
 						} else {
@@ -183,7 +188,7 @@ public class Connect extends Thread implements Config {
 	 * Pre: Post: Metodo el cual indica al cliente que se espera una entrada
 	 */
 	private String cinput(DataOutputStream out, DataInputStream in) {
-		write(out, "input", "I");
+		write(out, "input", "I");	// Escribimos timpo input
 		return read(in);
 	}
 
@@ -216,7 +221,11 @@ public class Connect extends Thread implements Config {
 	private void write(DataOutputStream out, String msg) {
 		write(out, "msg", msg);
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: metodo el cual envia un mensaje
+	 */
 	private void write(DataOutputStream out, String type, String msg) {
 		try {
 			msg = msg.replaceAll(";", "");
@@ -231,6 +240,10 @@ public class Connect extends Thread implements Config {
 
 	}
 
+	/*
+	 * Pre:
+	 * Post: Metodo toString()
+	 */
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
@@ -243,23 +256,42 @@ public class Connect extends Thread implements Config {
 	public synchronized boolean isOcupated() {
 		return this.ocupated;
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: Establecemos el servicio como ocupado
+	 */
 	public void setOcupated(boolean ocupated) {
 		this.ocupated = ocupated;
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: Metodo verifica si la conexion ha finalizado
+	 */
 	public synchronized boolean isFinalizated() {
 		return this.finalizated;
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: Establecemos el servicio como finalizado
+	 */
 	public void setFinalizated(boolean finalizated) {
 		this.finalizated = finalizated;
 	}
 
+	/*
+	 * Pre:
+	 * Post: Metodo el cual Obtiene el id del cliente
+	 */
 	public synchronized int getIdClient() {
 		return idClient;
 	}
-
+	/*
+	 * Pre:
+	 * Post: Metodo el cual establece el id del cliente
+	 */
 	public void setIdClient(int idClient) {
 		this.idClient = idClient;
 	}

@@ -23,14 +23,21 @@ public class ConnectSD extends Thread implements Config {
 	 */
 	private String[] leters = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
 			"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-
+	
+	/*
+	 * Pre:
+	 * Post: Metodo constructor de la conexion
+	 */
 	public ConnectSD(ServerSocket ss, Socket cs, int maxID) {
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
 	}
 
-	// Set DataSource
+	/*
+	 * Pre:
+	 * Post: Metodo el cual establece la array de tuplas comun
+	 */
 	public void setDS(ArrayList<Tupla> tuplasdt) {
 		this.tp = tuplasdt;
 	}
@@ -67,7 +74,9 @@ public class ConnectSD extends Thread implements Config {
 					System.out.println(codta);
 					// tp.add(new Tupla(dtdtaSp));
 					// Dicho if controla todo lo que tiene que ver con PN (Insert Note)
-					if (codta.equalsIgnoreCase("PN")) {
+					if(codta.equalsIgnoreCase("verify")) {
+						mensaje = "pin";
+					} else if(codta.equalsIgnoreCase("PN")) {
 						tp.add(new Tupla(dtdtaSp));
 						mensaje = "Inserccion exitosa";
 						
@@ -153,8 +162,6 @@ public class ConnectSD extends Thread implements Config {
 							}
 						}
 					}
-					
-					
 					
 					for (int i = 0; i < dtdtaSp.length; i++) {
 						System.out.println(dtdtaSp[i]);

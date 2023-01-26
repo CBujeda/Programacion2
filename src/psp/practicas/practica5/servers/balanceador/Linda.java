@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import psp.practicas.practica5.Config;
 
-public class Linda implements Config{
+public class Linda extends Thread implements Config{
 	
 	private ArrayList<Connect> lc = new ArrayList<Connect>();
 	int maxID = 0;
@@ -15,6 +15,10 @@ public class Linda implements Config{
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
  
+    /*
+     * Pre:
+     * Post: Método constructor
+     */
 	public Linda() {
 		try {
 			ss = new ServerSocket(Config.portLinda);
@@ -23,6 +27,15 @@ public class Linda implements Config{
 		}
 	}
 	
+	@Override
+	public void run() {
+		startServer();
+	}
+	
+	/**
+	 * Pre:
+	 * Post: Metodo el cual inicia el servidor linda
+	 */
 	public void startServer() {
 		while(true) {
 			if(this.lc.size() == 0) {
@@ -50,7 +63,9 @@ public class Linda implements Config{
 		this.lc.get(this.lc.size()-1).start();
 	}
 
-	public void getDataConnect() {
-		
+	public ArrayList<Connect> getConexions() {
+		return this.lc;
 	}
+	
+
 }

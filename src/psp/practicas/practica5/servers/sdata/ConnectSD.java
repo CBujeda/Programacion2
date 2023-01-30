@@ -18,6 +18,8 @@ public class ConnectSD extends Thread implements Config {
 	private boolean ocupated;
 	private boolean finalizated;
 	private int idClient;
+	private boolean copyClient;
+	
 	/*
 	 * Letras a verificar
 	 */
@@ -32,6 +34,7 @@ public class ConnectSD extends Thread implements Config {
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
+		copyClient = false;
 	}
 
 	/*
@@ -56,27 +59,37 @@ public class ConnectSD extends Thread implements Config {
 			cs = ss.accept(); // Accept comienza el socket y espera una conexión desde un cliente
 
 			this.ocupated = true;
-			info("Cliente en línea");
+			
 
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			DataOutputStream out = new DataOutputStream(cs.getOutputStream());
-			info("Linda Server ID:" + this.idClient);
+			
 			String mensaje = "";
 			while (true) {
 				String command = cinput(out, in); // commando
-				System.out.println(command);
 				String[] cdta = command.split("/");
 				if (cdta.length == 2) {
 					String codta = cdta[0];
 					codta = codta.replaceAll(" ", "");
 					String dtdta = cdta[1];
 					String[] dtdtaSp = dtdta.split(",");
-					System.out.println(codta);
 					// tp.add(new Tupla(dtdtaSp));
-					// Dicho if controla todo lo que tiene que ver con PN (Insert Note)
+					
 					if(codta.equalsIgnoreCase("verify")) {
 						mensaje = "pin";
-					} else if(codta.equalsIgnoreCase("PN")) {
+						copyClient = true;
+						
+					} else if(codta.equalsIgnoreCase("getAllData")) {
+						System.out.println("Get data");
+						copyClient = true;
+						mensaje = getAllData();
+						System.out.println(mensaje);
+						// Dicho if controla todo lo que tiene que ver con PN (Insert Note)
+					} else if(codta.equalsIgnoreCase("deleteAll")) {
+						for(int ab = 0; ab < tp.size();ab++) {
+							tp.remove(tp.size()-1);
+						}
+					} if(codta.equalsIgnoreCase("PN")) {
 						tp.add(new Tupla(dtdtaSp));
 						mensaje = "Inserccion exitosa";
 						
@@ -168,16 +181,39 @@ public class ConnectSD extends Thread implements Config {
 					}
 
 				}
+				//info("Cliente en línea");
+				if(copyClient == false) {
+					info("Linda Server ID:" + this.idClient);
+				}
 				viewData();
 				// if(command == "exit") {
 				write(out, mensaje);
 				closeConexion(out, cs);
+				
+				
 				break;
 				// }
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	private String getAllData() {
+		String dta_send = "";
+		for(int i = 0; i < tp.size();i++) {
+			String[] d = tp.get(i).getData();
+			for(int x  = 0; x < d.length; x++) {
+				dta_send = dta_send  + d[x];
+				if(x < d.length-1) {
+					dta_send = dta_send + ",";
+				}
+			}
+			if(i < tp.size()-1) {
+				dta_send = dta_send + "|";
+			}
+		}
+		return dta_send;
 	}
 
 	private void viewData() {

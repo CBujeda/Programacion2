@@ -16,8 +16,10 @@ public class Connect extends Thread implements Config {
 	private boolean ocupated;
 	private boolean finalizated;
 	private int idClient;
-
+	private boolean pause;
+	
 	public Connect(ServerSocket ss, Socket cs, int maxID) {
+		this.pause = false;
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
@@ -66,14 +68,19 @@ public class Connect extends Thread implements Config {
 								info(dta2[i]);
 							}
 							String result = "NO DATA";
-							if (dta2.length <= 3) {	// Servidores 1 / 12
-								
-								result = clientSDActuator(Config.portSD1, dt[0], dta);	
-								result = clientSDActuator(Config.portSD12, dt[0], dta);
-							} else if (dta2.length <= 5) {	//Servers 2
-								result = clientSDActuator(Config.portSD2, dt[0], dta);
-							} else if (dta2.length <= 6) {	// Servers 3
-								result = clientSDActuator(Config.portSD3, dt[0], dta);
+							if(pause == false) {
+								if (dta2.length <= 3) {	// Servidores 1 / 12
+									
+									result = clientSDActuator(Config.portSD1, dt[0], dta);	
+									result = clientSDActuator(Config.portSD12, dt[0], dta);
+								} else if (dta2.length <= 5) {	//Servers 2
+									result = clientSDActuator(Config.portSD2, dt[0], dta);
+								} else if (dta2.length <= 6) {	// Servers 3
+									result = clientSDActuator(Config.portSD3, dt[0], dta);
+								}
+							}else {
+								// Cod 5 = servers en pausa
+								result = "{COD: 5} Servidores en espera..";
 							}
 							System.out.println(result);
 							if(result.equalsIgnoreCase("error")) {
@@ -295,5 +302,15 @@ public class Connect extends Thread implements Config {
 	public void setIdClient(int idClient) {
 		this.idClient = idClient;
 	}
+
+	public synchronized boolean isPause() {
+		return pause;
+	}
+
+	public synchronized void setPause(boolean pause) {
+		this.pause = pause;
+	}
+	
+	
 
 }

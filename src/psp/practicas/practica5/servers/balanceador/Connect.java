@@ -69,10 +69,20 @@ public class Connect extends Thread implements Config {
 							}
 							String result = "NO DATA";
 							if(pause == false) {
+								result = "entra 1";
 								if (dta2.length <= 3) {	// Servidores 1 / 12
-									
-									result = clientSDActuator(Config.portSD1, dt[0], dta);	
-									result = clientSDActuator(Config.portSD12, dt[0], dta);
+									result = "entra 2";
+									String result1 = clientSDActuator(Config.portSD1, dt[0], dta);	
+									String result2 = clientSDActuator(Config.portSD12, dt[0], dta);
+									if(!result1.equalsIgnoreCase("error")) {
+										result = result1;
+									}
+									if(!result2.equalsIgnoreCase("error")) {
+										result = result2;
+									}
+									if(result1.equalsIgnoreCase("error") && result2.equalsIgnoreCase("error")) {
+										result = "error";
+									}
 								} else if (dta2.length <= 5) {	//Servers 2
 									result = clientSDActuator(Config.portSD2, dt[0], dta);
 								} else if (dta2.length <= 6) {	// Servers 3

@@ -108,7 +108,7 @@ public class ConnectSD extends Thread implements Config {
 											isIngnore = true;
 										}
 									}
-									if (!isIngnore) {
+									if (!isIngnore) {	
 										// Filtramos datos
 										if (!tupla[b].replaceAll(" ", "")
 												.equalsIgnoreCase(dtdtaSp[b].replaceAll(" ", ""))) {

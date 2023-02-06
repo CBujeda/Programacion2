@@ -49,8 +49,8 @@ public class CopySystem extends Thread implements Config {
 				//System.out.println("S2 -> S1");
 				if (this.caidoS2 == true) {
 					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");
-					caidoS1 = true;
-					caidoS2 = true;
+					caidoS1 = false;
+					caidoS2 = false;
 				} else {
 					copy("s2>s1");
 				}
@@ -65,8 +65,8 @@ public class CopySystem extends Thread implements Config {
 				//System.out.println("S1 -> S2");
 				if (this.caidoS1 == true) {
 					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");
-					caidoS1 = true;
-					caidoS2 = true;
+					caidoS1 = false;
+					caidoS2 = false;
 				} else {
 					copy("s1>s2");
 				}

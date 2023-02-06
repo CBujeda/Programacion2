@@ -2,6 +2,16 @@ package psp.practicas.practica5.servers.sdata;
 
 public class MainServerData {
 
+	/*
+	 * Pre:
+	 * Post: Metodo main el cual inicia el servidor de datos
+	 * 
+	 * 	CODS:
+	 * 		1		--> Server 1
+	 * 		12		--> Server 1 - Replica
+	 * 		2		--> Server 2
+	 * 		3		--> Server 3
+	 */
 	public static void main(String[] args) {
 		String dt = "1";
 		if(args.length > 0) {

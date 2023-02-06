@@ -199,6 +199,11 @@ public class ConnectSD extends Thread implements Config {
 		}
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual devuelve toda la cadena de datos en formato
+	 * 		 String
+	 */
 	private String getAllData() {
 		String dta_send = "";
 		for(int i = 0; i < tp.size();i++) {
@@ -210,12 +215,16 @@ public class ConnectSD extends Thread implements Config {
 				}
 			}
 			if(i < tp.size()-1) {
-				dta_send = dta_send + "|";
+				dta_send = dta_send + "/";
 			}
 		}
 		return dta_send;
 	}
 
+	/*
+	 * Pre:
+	 * Post: Metodo el cual muestra los datos por pantalla
+	 */
 	private void viewData() {
 		String data = "\n";
 		for (int i = 0; i < tp.size(); i++) {

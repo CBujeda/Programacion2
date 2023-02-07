@@ -10,6 +10,17 @@ import java.util.ArrayList;
 
 import psp.practicas.practica5.Config;
 
+/*
+ * Objeto thread de copiado de servidores
+ * Metodo de funcionamiento:
+ * 	Ejecutara una peticion a servidor de datos 1 y 2 esperando entre cada
+ * 	ejecucion un tiempo establecido, en caso de detectar uno de dichos servidores
+ * 	caidos lo detectara como caido, en caso de que dicho servidor vuelva a iniciarse y
+ * 	se detecte como caido, se borraran todos los datos de este ya que puede existir una
+ * 	mala transferencia, se pausaran todas las peticiones ejercidas por los clientes y por
+ * 	ultima instancia se obtendran los datos del servidor no caido y se insertaran en el 
+ *  servidor que se reinicio.
+ */
 public class CopySystem extends Thread implements Config {
 
 	private Linda l;
@@ -48,7 +59,7 @@ public class CopySystem extends Thread implements Config {
 				// Iniciar copia S2 -> S1
 				//System.out.println("S2 -> S1");
 				if (this.caidoS2 == true) {
-					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");
+					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");	// En caso de dos servers caidos
 					caidoS1 = false;
 					caidoS2 = false;
 				} else {
@@ -64,7 +75,7 @@ public class CopySystem extends Thread implements Config {
 				// Iniciar copia S1 -> S2
 				//System.out.println("S1 -> S2");
 				if (this.caidoS1 == true) {
-					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");
+					System.out.println("{ERROR} - > Server 1 y dos se cayeron por lo que no se comprende la copia");	// En caso de dos servers caidos
 					caidoS1 = false;
 					caidoS2 = false;
 				} else {
@@ -74,7 +85,7 @@ public class CopySystem extends Thread implements Config {
 			}
 			//System.out.println("S1.2: ->" + very2);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(2000);	// Tiempo determinado 2s
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -92,24 +103,23 @@ public class CopySystem extends Thread implements Config {
 		for (int i = 0; i < lc.size(); i++) {
 			lc.get(i).setPause(true);
 		}
-		System.out.println("XD");
 		if (direccion.equalsIgnoreCase("s2>s1")) {
 			String dta = clientSDActuator(Config.portSD12, "getAllData", "gad");
-			System.out.println(dta);
+			//System.out.println(dta);
 			clientSDActuator(Config.portSD1, "deleteAll", "da");
 			String[] dtaArr = dta.split("/");
 			for (int p = 0; p < dtaArr.length; p++) {
-				System.out.println(dtaArr[p]);
+				//System.out.println(dtaArr[p]);
 				clientSDActuator(Config.portSD1, "PN", dtaArr[p]);
 			}
 			this.caidoS1 = false;
 		} else if (direccion.equalsIgnoreCase("s1>s2")) {
 			String dta = clientSDActuator(Config.portSD1, "getAllData", "gad");
-			System.out.println(dta);
+			//System.out.println(dta);
 			clientSDActuator(Config.portSD12, "deleteAll", "da");
 			String[] dtaArr = dta.split("/");
 			for (int p = 0; p < dtaArr.length; p++) {
-				System.out.println(dtaArr[p]);
+				//System.out.println(dtaArr[p]);
 				clientSDActuator(Config.portSD12, "PN", dtaArr[p]);
 			}
 			this.caidoS2 = false;
@@ -131,7 +141,6 @@ public class CopySystem extends Thread implements Config {
 		String result = "";
 		try {
 			Socket cs = new Socket(Config.hostServers, port);
-
 			// Canal para recibir mensajes (entrada)
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			// Canal para enviar mensajes (salida)

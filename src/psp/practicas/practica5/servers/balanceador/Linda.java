@@ -7,10 +7,18 @@ import java.util.ArrayList;
 
 import psp.practicas.practica5.Config;
 
+/*
+ * Pre:
+ * Post: Metodo thread el cual inicializa el servidor linda
+ */
 public class Linda extends Thread implements Config{
 	
+	/*
+	 * Almacen de Conexiones el cual almacena las referencias de los threads
+	 * para su posterior control efectivo
+	 */
 	private ArrayList<Connect> lc = new ArrayList<Connect>();
-	int maxID = 0;
+	int maxID = 0;	// Id de conexion
 	
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
@@ -27,9 +35,13 @@ public class Linda extends Thread implements Config{
 		}
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo de carga de thread
+	 */
 	@Override
 	public void run() {
-		startServer();
+		startServer();	// Iniciamos servidor
 	}
 	
 	/**
@@ -63,7 +75,13 @@ public class Linda extends Thread implements Config{
 		this.lc.get(this.lc.size()-1).start();
 	}
 
-	public ArrayList<Connect> getConexions() {
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual obtenemos las direcciones de los threads
+	 * 		 Este metodo es usado por CopySystem para poner en modo pausa
+	 * 		 los threads de conexion
+	 */
+	public synchronized ArrayList<Connect> getConexions() {
 		return this.lc;
 	}
 	

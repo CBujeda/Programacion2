@@ -1,5 +1,8 @@
 package psp.practicas.practica5.servers.sdata;
 
+/*
+ * Clase inicializadora del servidor de datos
+ */
 public class MainServerData {
 
 	/*

@@ -9,17 +9,16 @@ import java.util.Scanner;
 import psp.practicas.practica5.Config;
 
 public class Client implements Config {
-	/*CONFIG*/
-	
-	
-	
 	//private boolean colors = true;
 	protected Socket cs;
 	public Client() throws IOException {
 		cs = new Socket(Config.hostServers, Config.portLinda);
 		// TODO Auto-generated constructor stub
 	}
-	
+	/*
+	 * Pre:
+	 * Post: Metodo de Conexion con el servidor y muestreo (Terminal tonta)
+	 */
 	 public void startClient() {//Método para iniciar el cliente
 	        try {
 	        	Scanner sc = new Scanner(System.in);
@@ -57,6 +56,10 @@ public class Client implements Config {
 	        }
 	    }
 	 
+	 	/*
+	 	 * Pre:
+	 	 * Post: Metodo de escritura en el cliente.
+	 	 */
 	 	public String write(Scanner sc,DataOutputStream out) {
 	 		if(Config.colors) {
 	 			System.out.print("\033[1;33m");
@@ -71,8 +74,7 @@ public class Client implements Config {
 				return w;
 			} catch (IOException e) {
 				e.printStackTrace();
-				return "error";
-				
+				return "error";	
 			}
-	 	}
+		}
 }

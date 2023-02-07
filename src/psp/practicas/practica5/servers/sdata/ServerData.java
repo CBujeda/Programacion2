@@ -9,15 +9,24 @@ import java.util.ArrayList;
 
 import psp.practicas.practica5.Config;
 import psp.practicas.practica5.servers.sdata.Tuplas.Tupla;
-
+/*
+ * Objeto del servidor de datos
+ */
 public class ServerData implements Config {
 
+	/*
+	 * Almacenador de tuplas
+	 */
 	ArrayList<Tupla> l = new ArrayList<Tupla>();
 
 	private ServerSocket ss;
 	protected Socket cs;
 	int type;
 
+	/*
+	 * Pre:
+	 * Post: Metodo constructor en el cual se indicara el tipo de servidor de datos que ejecutara
+	 */
 	public ServerData(int type) {
 		this.type = type;
 		int port = 5001;
@@ -38,7 +47,10 @@ public class ServerData implements Config {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/*
+	 * Almacenamiento de threads de conexiones
+	 */
 	private ArrayList<ConnectSD> lc = new ArrayList<ConnectSD>();
 	int maxID = 0;
 
@@ -63,15 +75,14 @@ public class ServerData implements Config {
 	/**
 	 * Pre: Post: Metodo el cual añade una conexion
 	 */
-	public void createConexion() {
+	public synchronized void createConexion() {			//Usamos syncronized ya que accedeb varios threads
 		this.lc.add(new ConnectSD(this.ss, this.cs, maxID));
 		this.lc.get(this.lc.size() - 1).setDS(l);
 		this.lc.get(this.lc.size() - 1).start();
 	}
 
-	public void addTupla(String[] data) {
+	public synchronized void addTupla(String[] data) {	// Usamos synchronized ya que acceden varios threads
 		this.l.add(new Tupla(data));
-
 	}
 
 	/**

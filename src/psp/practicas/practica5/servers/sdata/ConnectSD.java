@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import psp.practicas.practica5.Config;
 import psp.practicas.practica5.servers.sdata.Tuplas.Tupla;
 
+/*
+ * Objeto de conexion que carga el servidor de datos
+ */
 public class ConnectSD extends Thread implements Config {
 
 	private ArrayList<Tupla> tp;
@@ -57,13 +60,9 @@ public class ConnectSD extends Thread implements Config {
 		try {
 			info("Esperando..."); // Esperando conexión
 			cs = ss.accept(); // Accept comienza el socket y espera una conexión desde un cliente
-
 			this.ocupated = true;
-			
-
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			DataOutputStream out = new DataOutputStream(cs.getOutputStream());
-			
 			String mensaje = "";
 			while (true) {
 				String command = cinput(out, in); // commando
@@ -73,28 +72,25 @@ public class ConnectSD extends Thread implements Config {
 					codta = codta.replaceAll(" ", "");
 					String dtdta = cdta[1];
 					String[] dtdtaSp = dtdta.split(",");
-					// tp.add(new Tupla(dtdtaSp));
-					
-					if(codta.equalsIgnoreCase("verify")) {
+					if(codta.equalsIgnoreCase("verify")) {				// Respuesta de verificación del sistema
 						mensaje = "pin";
 						copyClient = true;
-						
-					} else if(codta.equalsIgnoreCase("getAllData")) {
+					} else if(codta.equalsIgnoreCase("getAllData")) {	// Devolucion de datos para el thread copia
 						System.out.println("Get data");
 						copyClient = true;
 						mensaje = getAllData();
 						System.out.println(mensaje);
 						// Dicho if controla todo lo que tiene que ver con PN (Insert Note)
-					} else if(codta.equalsIgnoreCase("deleteAll")) {
+					} else if(codta.equalsIgnoreCase("deleteAll")) {	// Sistema de eliminación de datos
 						for(int ab = 0; ab < tp.size();ab++) {
 							tp.remove(tp.size()-1);
 						}
-					} if(codta.equalsIgnoreCase("PN")) {
+					} if(codta.equalsIgnoreCase("PN")) {				// Sistema de insercción de datos
 						tp.add(new Tupla(dtdtaSp));
 						mensaje = "Inserccion exitosa";
 						
 					// Dicho if controla todo lo que tiene que ver con RN (Remove Note)
-					} else if (codta.equalsIgnoreCase("RN")) {
+					} else if (codta.equalsIgnoreCase("RN")) {			// Sistema de eliminación de datos
 						for (int i = 0; i < tp.size(); i++) {
 							boolean equals = true;
 							String[] tupla = tp.get(i).getData();
@@ -102,7 +98,7 @@ public class ConnectSD extends Thread implements Config {
 								for (int b = 0; b < tupla.length; b++) {
 									boolean isIngnore = false;
 									// Ingnoramos los que sean ?A - ?Z
-									for (int l = 0; l < this.leters.length; l++) {
+									for (int l = 0; l < this.leters.length; l++) {	// Sistema de de ingnoración de tuplas
 										String varIngnore = "?" + this.leters[l];
 										if (varIngnore.equals(dtdtaSp[b].replaceAll(" ", ""))) {
 											isIngnore = true;
@@ -128,7 +124,7 @@ public class ConnectSD extends Thread implements Config {
 						}
 
 					// Dicho if controla todo lo que tiene que ver con ReadN (Read Note)
-					}else if(codta.equalsIgnoreCase("ReadN")) {
+					}else if(codta.equalsIgnoreCase("ReadN")) {				// Sistema de lectura de tuplas
 						System.out.println("Entra a readn");
 						for (int i = 0; i < tp.size(); i++) {	// Comparamos todos los datos
 							boolean equals = true;
@@ -137,7 +133,7 @@ public class ConnectSD extends Thread implements Config {
 								for (int b = 0; b < tupla.length; b++) {
 									boolean isIngnore = false;
 									// Ingnoramos los que sean ?A - ?Z
-									for (int l = 0; l < this.leters.length; l++) {
+									for (int l = 0; l < this.leters.length; l++) {		// Sistema de ingnoración de datos
 										String varIngnore = "?" + this.leters[l];
 										if (varIngnore.equals(dtdtaSp[b].replaceAll(" ", ""))) {
 											System.out.println("Encontrado" + varIngnore);
@@ -181,12 +177,10 @@ public class ConnectSD extends Thread implements Config {
 					}
 
 				}
-				//info("Cliente en línea");
-				if(copyClient == false) {
+				if(copyClient == false) {					// Sistema de anti informacion excesiva en la lectura de datos
 					info("Linda Server ID:" + this.idClient);
 				}
 				viewData();
-				// if(command == "exit") {
 				write(out, mensaje);
 				closeConexion(out, cs);
 				
@@ -231,7 +225,6 @@ public class ConnectSD extends Thread implements Config {
 			data = data + "[";
 			for (int b = 0; b < tp.get(i).getData().length; b++) {
 				data = data + tp.get(i).getData()[b] + ", ";
-
 			}
 			data = data + "] \n";
 		}
@@ -240,7 +233,8 @@ public class ConnectSD extends Thread implements Config {
 	}
 
 	/**
-	 * Pre: Post: Mensaje de texto
+	 * Pre: Post: Mensaje de texto, En caso de activar la configuración
+	 * 			  en color se mostrarn colores
 	 */
 	private void info(String txt) {
 		if (Config.colors) {

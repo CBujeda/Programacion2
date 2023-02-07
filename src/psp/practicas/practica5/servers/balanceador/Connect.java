@@ -8,7 +8,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import psp.practicas.practica5.Config;
-
+/*
+ * Objeto de conexion de cliente y balanceo con los servidores de datos
+ */
 public class Connect extends Thread implements Config {
 
 	private ServerSocket ss;
@@ -18,6 +20,10 @@ public class Connect extends Thread implements Config {
 	private int idClient;
 	private boolean pause;
 	
+	/*
+	 * Pre:
+	 * Post: Metodo constructor
+	 */
 	public Connect(ServerSocket ss, Socket cs, int maxID) {
 		this.pause = false;
 		this.ss = ss;
@@ -54,12 +60,12 @@ public class Connect extends Thread implements Config {
 				write(out, "Linea de comandos:");
 				while (true) {
 					write(out, "------Commands------\n" + "● PostNote (PN / [\"\",\"\"])\n"
-							+ "● RemoveNote (RN / [\"\",\"\"])\n" + "● ReadNote (ReadN / [\"\",\"\"]): ");
+							+ "● RemoveNote (RN / [\"\",\"\"])\n" + "● ReadNote (ReadN / [\"\",\"\"]): ");	// informativo
 					mensaje = cinput(out, in);
 					System.out.println(mensaje);
 					String[] dt = mensaje.split("/");
 					if (dt.length == 2) {
-						String dta = dt[1].replaceAll("\"", "");
+						String dta = dt[1].replaceAll("\"", "");	// Limpieza de datos
 						dta = dta.replaceAll("\\[", "");
 						dta = dta.replaceAll("\\]", "");	// Eliminamos formato
 						String[] dta2 = dta.split(",");
@@ -68,7 +74,7 @@ public class Connect extends Thread implements Config {
 								info(dta2[i]);
 							}
 							String result = "NO DATA";
-							if(pause == false) {
+							if(pause == false) {	// Pausador
 								result = "entra 1";
 								if (dta2.length <= 3) {	// Servidores 1 / 12
 									result = "entra 2";
@@ -92,7 +98,7 @@ public class Connect extends Thread implements Config {
 								// Cod 5 = servers en pausa
 								result = "{COD: 5} Servidores en espera..";
 							}
-							System.out.println(result);
+							//System.out.println(result);
 							if(result.equalsIgnoreCase("error")) {
 								result = "Ha ocurrido un error en el servidor, "
 										+ "Se esta realizando copia de seguridad"
@@ -103,7 +109,6 @@ public class Connect extends Thread implements Config {
 						} else {
 							write(out, "Se han excedido el limite");
 						}
-
 					} else {
 						write(out, "Comando invalido");
 					}
@@ -121,7 +126,11 @@ public class Connect extends Thread implements Config {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual se establece una coexion al servidor de datos
+	 */
 	public String clientSDActuator(int port, String command, String data) {
 		String result = "";
 		try {

@@ -7,10 +7,10 @@ public class MainLinda {
 	 * Post: Metodo el cual inicia el servidor linda y el sistema de copiado
 	 */
 	public static void main(String[] args) {
-		Linda l = new Linda();
+		Linda l = new Linda();	// iniciamos linda
 		l.start();
-		CopySystem csys = new CopySystem();
-		csys.setLinda(l);
+		CopySystem csys = new CopySystem();	// Iniciamos el sistema de copia
+		csys.setLinda(l);					// Establecemos el servidor linda que el sistema de copiado usara
 		csys.start();
 	}
 }

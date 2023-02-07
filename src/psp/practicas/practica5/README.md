@@ -9,7 +9,9 @@
 <img src="assets/20230207_105531_Linda_Logo.png" width="300" height="200" /><br>
 </a>
 
+[AVISO] La version compilada es necesario ejecutar como administrador debido al firewall de windows
 
+>
 > ```
 > Esta última práctica de la asignatura consiste en diseñar e implementar un sistema de
 > coordinación distribuido LINDA. El sistema específico deberá implementar las tres

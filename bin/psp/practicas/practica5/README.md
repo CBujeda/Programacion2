@@ -5,6 +5,11 @@
 
 ### **PROYECTO LINDA**
 
+<a href="https://www.youtube.com/embed/pNuqHhpU1TI">
+<img src="assets/20230207_105531_Linda_Logo.png" width="300" height="200" /><br>
+</a>
+
+
 > ```
 > Esta última práctica de la asignatura consiste en diseñar e implementar un sistema de
 > coordinación distribuido LINDA. El sistema específico deberá implementar las tres
@@ -28,7 +33,7 @@
 > ● Conectarse al servicio.
 > ● Desconectarse del servicio.
 > ● Cualquiera de las tres operaciones básicas para trabajar con tuplas.
-> 
+>
 > El servidor LINDA estará formado por tres servidores, que se ejecutan en distintas
 > máquinas, responsables de almacenar y gestionar las operaciones que se realicen
 > sobre las tuplas que cumplan sus condiciones. El primer servidor, se encargará de

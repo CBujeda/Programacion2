@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import psp.practicas.practica5.Config;
+
 /*
  * Objeto de conexion de cliente y balanceo con los servidores de datos
  */
@@ -19,10 +20,9 @@ public class Connect extends Thread implements Config {
 	private boolean finalizated;
 	private int idClient;
 	private boolean pause;
-	
+
 	/*
-	 * Pre:
-	 * Post: Metodo constructor
+	 * Pre: Post: Metodo constructor
 	 */
 	public Connect(ServerSocket ss, Socket cs, int maxID) {
 		this.pause = false;
@@ -60,54 +60,59 @@ public class Connect extends Thread implements Config {
 				write(out, "Linea de comandos:");
 				while (true) {
 					write(out, "------Commands------\n" + "● PostNote (PN / [\"\",\"\"])\n"
-							+ "● RemoveNote (RN / [\"\",\"\"])\n" + "● ReadNote (ReadN / [\"\",\"\"]): ");	// informativo
+							+ "● RemoveNote (RN / [\"\",\"\"])\n" + "● ReadNote (ReadN / [\"\",\"\"]): "); // informativo
 					mensaje = cinput(out, in);
 					System.out.println(mensaje);
 					String[] dt = mensaje.split("/");
 					if (dt.length == 2) {
-						String dta = dt[1].replaceAll("\"", "");	// Limpieza de datos
-						dta = dta.replaceAll("\\[", "");
-						dta = dta.replaceAll("\\]", "");	// Eliminamos formato
-						String[] dta2 = dta.split(",");
-						if (dta2.length <= 6) {
-							for (int i = 0; i < dta2.length; i++) {
-								info(dta2[i]);
-							}
-							String result = "NO DATA";
-							if(pause == false) {	// Pausador
-								result = "entra 1";
-								if (dta2.length <= 3) {	// Servidores 1 / 12
-									result = "entra 2";
-									String result1 = clientSDActuator(Config.portSD1, dt[0], dta);	
-									String result2 = clientSDActuator(Config.portSD12, dt[0], dta);
-									if(!result1.equalsIgnoreCase("error")) {
-										result = result1;
-									}
-									if(!result2.equalsIgnoreCase("error")) {
-										result = result2;
-									}
-									if(result1.equalsIgnoreCase("error") && result2.equalsIgnoreCase("error")) {
-										result = "error";
-									}
-								} else if (dta2.length <= 5) {	//Servers 2
-									result = clientSDActuator(Config.portSD2, dt[0], dta);
-								} else if (dta2.length <= 6) {	// Servers 3
-									result = clientSDActuator(Config.portSD3, dt[0], dta);
+
+						if (verifiContext(dt[1])) {
+
+							String dta = dt[1].replaceAll("\"", ""); // Limpieza de datos
+							dta = dta.replaceAll("\\[", "");
+							dta = dta.replaceAll("\\]", ""); // Eliminamos formato
+							String[] dta2 = dta.split(",");
+							if (dta2.length <= 6) {
+								for (int i = 0; i < dta2.length; i++) {
+									info(dta2[i]);
 								}
-							}else {
-								// Cod 5 = servers en pausa
-								result = "{COD: 5} Servidores en espera..";
+								String result = "NO DATA";
+								if (pause == false) { // Pausador
+									result = "entra 1";
+									if (dta2.length <= 3) { // Servidores 1 / 12
+										result = "entra 2";
+										String result1 = clientSDActuator(Config.portSD1, dt[0], dta);
+										String result2 = clientSDActuator(Config.portSD12, dt[0], dta);
+										if (!result1.equalsIgnoreCase("error")) {
+											result = result1;
+										}
+										if (!result2.equalsIgnoreCase("error")) {
+											result = result2;
+										}
+										if (result1.equalsIgnoreCase("error") && result2.equalsIgnoreCase("error")) {
+											result = "error";
+										}
+									} else if (dta2.length <= 5) { // Servers 2
+										result = clientSDActuator(Config.portSD2, dt[0], dta);
+									} else if (dta2.length <= 6) { // Servers 3
+										result = clientSDActuator(Config.portSD3, dt[0], dta);
+									}
+								} else {
+									// Cod 5 = servers en pausa
+									result = "{COD: 5} Servidores en espera..";
+								}
+								// System.out.println(result);
+								if (result.equalsIgnoreCase("error")) {
+									result = "Ha ocurrido un error en el servidor, "
+											+ "Se esta realizando copia de seguridad" + "\n Sentimos las molestias";
+								}
+								write(out, result);
+								break;
+							} else {
+								write(out, "Se han excedido el limite");
 							}
-							//System.out.println(result);
-							if(result.equalsIgnoreCase("error")) {
-								result = "Ha ocurrido un error en el servidor, "
-										+ "Se esta realizando copia de seguridad"
-										+ "\n Sentimos las molestias";
-							}
-							write(out, result);
-							break;
-						} else {
-							write(out, "Se han excedido el limite");
+						}else {
+							write(out, "Estructura de tupla invalida");
 						}
 					} else {
 						write(out, "Comando invalido");
@@ -126,10 +131,9 @@ public class Connect extends Thread implements Config {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	/*
-	 * Pre:
-	 * Post: Metodo con el cual se establece una coexion al servidor de datos
+	 * Pre: Post: Metodo con el cual se establece una coexion al servidor de datos
 	 */
 	public String clientSDActuator(int port, String command, String data) {
 		String result = "";
@@ -214,7 +218,7 @@ public class Connect extends Thread implements Config {
 	 * Pre: Post: Metodo el cual indica al cliente que se espera una entrada
 	 */
 	private String cinput(DataOutputStream out, DataInputStream in) {
-		write(out, "input", "I");	// Escribimos timpo input
+		write(out, "input", "I"); // Escribimos timpo input
 		return read(in);
 	}
 
@@ -247,10 +251,9 @@ public class Connect extends Thread implements Config {
 	private void write(DataOutputStream out, String msg) {
 		write(out, "msg", msg);
 	}
-	
+
 	/*
-	 * Pre:
-	 * Post: metodo el cual envia un mensaje
+	 * Pre: Post: metodo el cual envia un mensaje
 	 */
 	private void write(DataOutputStream out, String type, String msg) {
 		try {
@@ -267,8 +270,7 @@ public class Connect extends Thread implements Config {
 	}
 
 	/*
-	 * Pre:
-	 * Post: Metodo toString()
+	 * Pre: Post: Metodo toString()
 	 */
 	@Override
 	public String toString() {
@@ -282,41 +284,37 @@ public class Connect extends Thread implements Config {
 	public synchronized boolean isOcupated() {
 		return this.ocupated;
 	}
-	
+
 	/*
-	 * Pre:
-	 * Post: Establecemos el servicio como ocupado
+	 * Pre: Post: Establecemos el servicio como ocupado
 	 */
 	public void setOcupated(boolean ocupated) {
 		this.ocupated = ocupated;
 	}
-	
+
 	/*
-	 * Pre:
-	 * Post: Metodo verifica si la conexion ha finalizado
+	 * Pre: Post: Metodo verifica si la conexion ha finalizado
 	 */
 	public synchronized boolean isFinalizated() {
 		return this.finalizated;
 	}
-	
+
 	/*
-	 * Pre:
-	 * Post: Establecemos el servicio como finalizado
+	 * Pre: Post: Establecemos el servicio como finalizado
 	 */
 	public void setFinalizated(boolean finalizated) {
 		this.finalizated = finalizated;
 	}
 
 	/*
-	 * Pre:
-	 * Post: Metodo el cual Obtiene el id del cliente
+	 * Pre: Post: Metodo el cual Obtiene el id del cliente
 	 */
 	public synchronized int getIdClient() {
 		return idClient;
 	}
+
 	/*
-	 * Pre:
-	 * Post: Metodo el cual establece el id del cliente
+	 * Pre: Post: Metodo el cual establece el id del cliente
 	 */
 	public void setIdClient(int idClient) {
 		this.idClient = idClient;
@@ -329,7 +327,34 @@ public class Connect extends Thread implements Config {
 	public synchronized void setPause(boolean pause) {
 		this.pause = pause;
 	}
-	
-	
+
+	/*
+	 * Pre: Post: Metodo de verificacion de la estructura de las tuplas
+	 */
+	public boolean verifiContext(String dta) {
+
+		dta = dta.replaceAll(" ", "");
+		if (dta.matches("^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")
+				|| dta.matches("^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")
+				|| dta.matches(
+						"^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"" + ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+								+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")
+				|| dta.matches("^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"" + ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")
+				|| dta.matches("^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"" + ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")
+				|| dta.matches("^\\[\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"" + ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"" + ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\""
+						+ ",\"[\\w-\\s\\?\\¿\\¡\\!\\'\\{\\}\\.\\@]*\"\\]")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

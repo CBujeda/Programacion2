@@ -16,7 +16,7 @@ public class MainServerData {
 	 * 		3		--> Server 3
 	 */
 	public static void main(String[] args) {
-		String dt = "1";
+		String dt = "12";
 		if(args.length > 0) {
 			dt = args[0];	// obtenemos argumentos
 		}

@@ -68,10 +68,15 @@ public class Connect extends Thread implements Config {
 
 						if (verifiContext(dt[1])) {
 
-							String dta = dt[1].replaceAll("\"", ""); // Limpieza de datos
+							String dta = dt[1]; // Limpieza de datos
 							dta = dta.replaceAll("\\[", "");
 							dta = dta.replaceAll("\\]", ""); // Eliminamos formato
 							String[] dta2 = dta.split(",");
+							for(int p = 0; p < dta2.length; p++) {
+								dta2[p].replaceAll("\"", "");
+							}
+							System.out.println(dta2.length);
+							
 							if (dta2.length <= 6) {
 								for (int i = 0; i < dta2.length; i++) {
 									info(dta2[i]);

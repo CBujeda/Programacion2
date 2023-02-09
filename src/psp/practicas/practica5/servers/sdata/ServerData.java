@@ -42,7 +42,6 @@ public class ServerData implements Config {
 		}
 		try {
 			ss = new ServerSocket(port);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,6 +53,11 @@ public class ServerData implements Config {
 	private ArrayList<ConnectSD> lc = new ArrayList<ConnectSD>();
 	int maxID = 0;
 
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual Iniciamos el sistema se threads para la espera
+	 * 		 de un hipotetico cliente
+	 */
 	public void startSD() {
 		while (true) {
 			if (this.lc.size() == 0) {

@@ -167,7 +167,6 @@ public class ConnectSD extends Thread implements Config {
 								mensaje = "Se ha encontrado el siguiente mensaje: \n "
 										+ "		> " + data ;
 								break;
-
 							}
 						}
 					}
@@ -183,10 +182,7 @@ public class ConnectSD extends Thread implements Config {
 				viewData();
 				write(out, mensaje);
 				closeConexion(out, cs);
-				
-				
 				break;
-				// }
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -7,12 +7,25 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import psp.practicas.practica6.Config;
+import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Client  implements Config {
 	//private boolean colors = true;
+	private String publicKeyServer;
+	
+	private String publicKeyClient;
+	private String privateKeyClient;
+	private Cifrator crClient;
+	private Cifrator crServer;
+	private boolean startCyphredTell;
+	
 	protected Socket cs;
 	public Client() throws IOException {
 		cs = new Socket(Config.ip_server, Config.port_server);
+		startCyphredTell = false;
+		crClient = new Cifrator();
+		crClient.genKeys();
+		crServer = new Cifrator();
 		// TODO Auto-generated constructor stub
 	}
 	/*
@@ -30,6 +43,9 @@ public class Client  implements Config {
 	        	while(true) {
 
 		            String smsg = in.readUTF();
+		            if(startCyphredTell) {
+		            	smsg = crClient.decrypt(smsg);
+        			}
 		            if(smsg != "") {
 		            	String [] dsmsg = smsg.split(";");
 		            	if(dsmsg.length == 2) {
@@ -39,7 +55,13 @@ public class Client  implements Config {
 		            			if(Config.colors) {
 		            				System.out.print("\033[1;36m");
 		            			}
-		            			System.out.println("[SERVER] > " + dsmsg[1]);	
+		            			String data = dsmsg[1];
+		            			System.out.println("[SERVER] > " + data);	
+		            		}else if(dsmsg[0].equalsIgnoreCase("pubkey")) {
+		            			this.publicKeyServer = dsmsg[1];
+		            			crServer.setPublicKey(this.publicKeyServer);
+		            			out.writeUTF(crClient.getPublickey());
+		            			startCyphredTell = true;
 		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {
 		            			cs.close();
 		            		}
@@ -49,7 +71,6 @@ public class Client  implements Config {
 		            	cs.close();
 		            }
 	        	}
-	        	
 	        }
 	        catch (Exception e) {
 	            System.out.println(e.getMessage());
@@ -70,6 +91,10 @@ public class Client  implements Config {
 	 		}
             try {
             	String w = sc.nextLine();
+            	if(startCyphredTell) {
+            		System.out.println(crServer.getPublickey());
+            		w = crServer.crypt(w,this.publicKeyServer);
+            	}
 				out.writeUTF(w);
 				return w;
 			} catch (IOException e) {

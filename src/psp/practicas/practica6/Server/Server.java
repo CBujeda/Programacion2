@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import psp.practicas.practica6.Config;
+import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 
 public class Server extends Thread implements Config{
@@ -19,12 +20,16 @@ public class Server extends Thread implements Config{
 	
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
+
+    
  
     /*
      * Pre:
      * Post: Método constructor
      */
 	public Server() {
+		
+	
 		try {
 			ss = new ServerSocket(Config.port_server);
 		} catch (IOException e) {

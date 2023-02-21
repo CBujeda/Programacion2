@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import psp.practicas.practica6.Config;
+import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Connect extends Thread implements Config {
 
@@ -15,8 +16,20 @@ public class Connect extends Thread implements Config {
 	private boolean ocupated;
 	private boolean finalizated;
 	private int idClient;
-
+	Cifrator crServer;
+	Cifrator crClient;
+    private String serverPublicKey;
+    private String serverPrivateKey;
+    private boolean startCryptTell;
+    
 	public Connect(ServerSocket ss, Socket cs, int maxID) {
+		this.crServer = new Cifrator();
+		this.crServer.genKeys();
+		this.crClient = new Cifrator();
+		this.startCryptTell = false;
+		this.serverPublicKey = crServer.getPrivatekey();
+		this.serverPrivateKey = crServer.getPublickey();
+		
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
@@ -42,8 +55,13 @@ public class Connect extends Thread implements Config {
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			DataOutputStream out = new DataOutputStream(cs.getOutputStream());
 			// Enviar clave publica
-			
-			write(out, "Conexion establecida");
+			// Obtenemos clave publica
+			write(out,"pubkey" ,this.serverPublicKey);
+			String keyClient = read(in);
+			this.crClient.setPublicKey(keyClient);
+			System.out.println(keyClient);
+			this.startCryptTell = true;
+			write(out,"Conexion establecida");
 			write(out, "-----------------------");
 			write(out, "INICIO COMPRA:Cliente " + this.idClient);
 			info("Cliente conectado " + this.idClient);
@@ -54,7 +72,6 @@ public class Connect extends Thread implements Config {
 				write(out, "BIENVENIDO A JAVA CHAT");
 
 				write(out, " CLIENTE: " + this.idClient);
-				write(out, "Desea reservar otra plaza? S/N");
 				mensaje = cinput(out, in);
 				if (mensaje.equalsIgnoreCase("N")) {
 					closeConexion(out, cs);
@@ -114,7 +131,14 @@ public class Connect extends Thread implements Config {
 	 */
 	private String read(DataInputStream in) { // Mejorar
 		try {
-			return in.readUTF();
+			
+			//startCryptTell
+			String getData = in.readUTF();
+			if(startCryptTell) {
+				getData = crClient.decrypt(getData);
+			}
+			
+			return getData;
 		} catch (IOException e) {
 			System.out.println("Fallo al leer datos, Rompiendo conexion | Client: " + this.idClient);
 			e.printStackTrace();
@@ -143,7 +167,14 @@ public class Connect extends Thread implements Config {
 		try {
 			msg = msg.replaceAll(";", "");
 			type = type.replaceAll(";", "");
-			out.writeUTF(type + ";" + msg);
+			
+			String data = type + ";" + msg;
+			if(startCryptTell) {
+				data = crClient.crypt(data);
+			}
+			//startCryptTell
+			
+			out.writeUTF(data);
 		} catch (IOException e) {
 			System.out.println("Fallo al escribir datos, Rompiendo conexion | Client: " + this.idClient);
 			e.printStackTrace();

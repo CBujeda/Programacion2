@@ -1,4 +1,6 @@
-package psp.practicas.practica6.Server;
+package psp.practicas.practica6.a_practica6_2.server;
+
+
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,8 +10,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import psp.practicas.practica6.Config;
-import psp.practicas.practica6.Server.Objects.Datas;
-import psp.practicas.practica6.Server.Objects.Sala;
+import psp.practicas.practica6.a_practica6_2.server.objects.Sala;
+import psp.practicas.practica6.a_practica6_2.server.objects.Salas;
+import psp.practicas.practica6.a_practica6_2.server.objects.Usuario;
 import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Connect extends Thread implements Config {
@@ -24,20 +27,19 @@ public class Connect extends Thread implements Config {
     private String serverPublicKey;
     private String serverPrivateKey;
     private boolean startCryptTell;
+    private Salas salas;
     
-    private Datas g_dataA;
-    
-	public Connect(ServerSocket ss, Socket cs, int maxID,Datas l_dataA) {
+	public Connect(ServerSocket ss, Socket cs, int maxID,Salas s) {
 		this.crServer = new Cifrator();
 		this.crServer.genKeys();
 		this.crClient = new Cifrator();
 		this.startCryptTell = false;
 		this.serverPublicKey = crServer.getPublickey();
 		this.serverPrivateKey = crServer.getPrivatekey();
-		this.g_dataA = l_dataA;
 		this.ss = ss;
 		this.cs = cs;
 		this.idClient = maxID + 1;
+		this.salas = s;
 
 	}
 
@@ -59,12 +61,16 @@ public class Connect extends Thread implements Config {
 
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			DataOutputStream out = new DataOutputStream(cs.getOutputStream());
+			
+			Usuario user = new Usuario();
+			user.setIn(in);
+			user.setOut(out);
+			
 			// Enviar clave publica
 			// Obtenemos clave publica
 			write(out,"pubkey" ,this.serverPublicKey);
 			String keyClient = read(in);
 			this.crClient.setPublicKey(keyClient);
-			System.out.println(keyClient);
 			this.startCryptTell = true;
 			write(out,"Conexion establecida");
 			write(out, "-----------------------");
@@ -74,9 +80,6 @@ public class Connect extends Thread implements Config {
 			help(out);
 			while (true) {
 				// Se le envía un mensaje al cliente usando su flujo de salida
-
-				
-				
 				mensaje = cinput(out, in);
 				
 				if(mensaje.equalsIgnoreCase("UN")) {
@@ -88,15 +91,24 @@ public class Connect extends Thread implements Config {
 					write(out,"└▐► Pass:");
 					String pass = cinput(out, in);
 					write(out,name + ":" + pass);
-					
-					
+					while(true) {
+						write(out,"► Desea Crearla? S/N");
+						String qcrate = cinput(out, in);
+						if(qcrate.equalsIgnoreCase("S")) {
+							Sala s = new Sala();
+							s.addUser(user);
+							s.setName(name);
+							s.setPass(pass);
+							salas.addNewSala(s);
+							connectToChat(s,out,in);
+							//break;
+						}
+					}
 				}else if(mensaje.equalsIgnoreCase("LI")){
 					list(out);
 				}else if(mensaje.equalsIgnoreCase("H")){
 					help(out);
-				}
-				
-				if (mensaje.equalsIgnoreCase("N")) {
+				}else if(mensaje.equalsIgnoreCase("S")) {
 					closeConexion(out, cs);
 					break;
 				}
@@ -107,6 +119,20 @@ public class Connect extends Thread implements Config {
 		}
 	}
 	
+	private void connectToChat(Sala s,DataOutputStream out,DataInputStream in) {
+		startChat(out);
+		while(true) {
+			String mensajeChat = read(in);//(out, in);
+			System.out.println(mensajeChat);
+			
+			
+		}
+	}
+	
+	private void startChat(DataOutputStream out) {
+		write(out,"chat","C");
+	}
+	
 	private void msgCreator(DataOutputStream out) {
 		write(out,"▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
 		write(out,"█████►    SALA CREATOR    ◄█████");
@@ -114,7 +140,7 @@ public class Connect extends Thread implements Config {
 	}
 	
 	private void list(DataOutputStream out) {
-		ArrayList<String> s = g_dataA.getAllSalaStr();
+		ArrayList<String> s = salas.getAllSalaStr();
 		for(int i = 0; i < s.size(); i++) {
 			write(out,s.get(i));
 		}
@@ -127,6 +153,7 @@ public class Connect extends Thread implements Config {
 		write(out,"█ [CR]   -  Crear una nueva sala de chat.                       █");
 		write(out,"█ [LI]   -  Listar las salas disponibles.                       █");
 		write(out,"█ [H ]   -  Esta Lista                                          █");
+		write(out,"█ [S ]   -  Salir                                               █");
 		write(out,"█████████████████████████████████████████████████████████████████");
 	}
 	
@@ -181,7 +208,6 @@ public class Connect extends Thread implements Config {
 			
 			//startCryptTell
 			String getData = in.readUTF();
-			System.out.println(getData);
 			if(startCryptTell) {
 				getData = crServer.decrypt(getData);
 			}

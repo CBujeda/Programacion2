@@ -1,4 +1,4 @@
-package psp.practicas.practica6.Server;
+package psp.practicas.practica6.a_practica6_2.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,10 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import psp.practicas.practica6.Config;
-import psp.practicas.practica6.Server.Objects.Datas;
-import psp.practicas.practica6.Server.Objects.Sala;
-import psp.practicas.practica6.utils.rsaUtil.Cifrator;
-
+import psp.practicas.practica6.a_practica6_2.server.objects.Salas;
 
 public class Server extends Thread implements Config{
 	
@@ -23,16 +20,15 @@ public class Server extends Thread implements Config{
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
 
-    private Datas d;
 
-    
+    private Salas s;
  
     /*
      * Pre:
      * Post: Método constructor
      */
 	public Server() {
-		this.d = new Datas();	
+		this.s = new Salas();
 		try {
 			ss = new ServerSocket(Config.port_server);
 		} catch (IOException e) {
@@ -76,7 +72,7 @@ public class Server extends Thread implements Config{
 	 * Post: Metodo el cual añade una conexion
 	 */
 	public void createConexion() {
-		this.lc.add(new Connect(this.ss, this.cs,maxID,d));
+		this.lc.add(new Connect(this.ss, this.cs,maxID,s));
 		this.lc.get(this.lc.size()-1).start();
 	}
 
@@ -89,6 +85,4 @@ public class Server extends Thread implements Config{
 	public synchronized ArrayList<Connect> getConexions() {
 		return this.lc;
 	}
-	
-
 }

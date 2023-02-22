@@ -1,4 +1,4 @@
-package psp.practicas.practica6.Client;
+package psp.practicas.practica6.a_practica6_2.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -40,6 +40,8 @@ public class Client  implements Config {
 	        	// Canal para enviar mensajes (salida)
 	            DataOutputStream out = new DataOutputStream(cs.getOutputStream());
 	            String cmsg = "";
+	            
+	            
 	        	while(true) {
 
 		            String smsg = in.readUTF();
@@ -63,9 +65,16 @@ public class Client  implements Config {
 		            			out.writeUTF(crClient.getPublickey());
 		            			startCyphredTell = true;
 		            		}else if(dsmsg[0].equalsIgnoreCase("chat")) {
-		            			
-		            			
-		            			
+		            			Input i = new Input(out,crServer);
+		        	            i.start();
+		            			while(true) {
+		            				String mensajeChat = in.readUTF();
+		            				if(startCyphredTell) {
+		        		            	String mCDecrypt = crClient.decrypt(mensajeChat);
+		        		            	System.out.println(mCDecrypt);
+		        		            	
+		                			}
+		            			}
 		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {
 		            			cs.close();
 		            		}

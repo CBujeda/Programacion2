@@ -3,6 +3,8 @@ package psp.practicas.practica6.a_practica6_2.server.objects;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import psp.practicas.practica6.utils.rsaUtil.Cifrator;
+
 public class Usuario {
 
 	
@@ -10,6 +12,8 @@ public class Usuario {
 	private String name;
 	private DataInputStream in;
 	private DataOutputStream out;
+	private Cifrator clientCrypter;
+	
 	public Usuario() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -45,6 +49,14 @@ public class Usuario {
 	public void setOut(DataOutputStream out) {
 		this.out = out;
 	}
+	public Cifrator getClientCrypter() {
+		return clientCrypter;
+	}
+	public void setClientCrypter(Cifrator clientCrypter) {
+		this.clientCrypter = clientCrypter;
+	}
+	
+	
 	
 	//DataInputStream in = new DataInputStream(cs.getInputStream());
 	//DataOutputStream out = new DataOutputStream(cs.getOutputStream());

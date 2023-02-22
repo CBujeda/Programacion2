@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import psp.practicas.practica6.Config;
 import psp.practicas.practica6.a_practica6_2.server.objects.Salas;
+import psp.practicas.practica6.utils.IdGen;
 
 public class Server extends Thread implements Config{
 	
@@ -20,7 +21,7 @@ public class Server extends Thread implements Config{
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
 
-
+    IdGen idgen;
     private Salas s;
  
     /*
@@ -28,6 +29,8 @@ public class Server extends Thread implements Config{
      * Post: Método constructor
      */
 	public Server() {
+		this.idgen = new IdGen();
+		this.idgen.enableAntyUsed();
 		this.s = new Salas();
 		try {
 			ss = new ServerSocket(Config.port_server);
@@ -72,7 +75,7 @@ public class Server extends Thread implements Config{
 	 * Post: Metodo el cual añade una conexion
 	 */
 	public void createConexion() {
-		this.lc.add(new Connect(this.ss, this.cs,maxID,s));
+		this.lc.add(new Connect(this.ss, this.cs,maxID,s,idgen));
 		this.lc.get(this.lc.size()-1).start();
 	}
 

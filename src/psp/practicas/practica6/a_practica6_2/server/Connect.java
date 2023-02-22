@@ -13,6 +13,7 @@ import psp.practicas.practica6.Config;
 import psp.practicas.practica6.a_practica6_2.server.objects.Sala;
 import psp.practicas.practica6.a_practica6_2.server.objects.Salas;
 import psp.practicas.practica6.a_practica6_2.server.objects.Usuario;
+import psp.practicas.practica6.utils.IdGen;
 import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Connect extends Thread implements Config {
@@ -28,8 +29,9 @@ public class Connect extends Thread implements Config {
     private String serverPrivateKey;
     private boolean startCryptTell;
     private Salas salas;
-    
-	public Connect(ServerSocket ss, Socket cs, int maxID,Salas s) {
+    private Usuario user;
+    IdGen idgen;
+	public Connect(ServerSocket ss, Socket cs, int maxID,Salas s,IdGen idgen) {
 		this.crServer = new Cifrator();
 		this.crServer.genKeys();
 		this.crClient = new Cifrator();
@@ -40,6 +42,8 @@ public class Connect extends Thread implements Config {
 		this.cs = cs;
 		this.idClient = maxID + 1;
 		this.salas = s;
+		this.user = new Usuario();
+		this.idgen = idgen;
 
 	}
 
@@ -62,7 +66,7 @@ public class Connect extends Thread implements Config {
 			DataInputStream in = new DataInputStream(cs.getInputStream());
 			DataOutputStream out = new DataOutputStream(cs.getOutputStream());
 			
-			Usuario user = new Usuario();
+			
 			user.setIn(in);
 			user.setOut(out);
 			
@@ -72,6 +76,7 @@ public class Connect extends Thread implements Config {
 			String keyClient = read(in);
 			this.crClient.setPublicKey(keyClient);
 			this.startCryptTell = true;
+			user.setClientCrypter(crClient);
 			write(out,"Conexion establecida");
 			write(out, "-----------------------");
 			String mensaje = "";
@@ -83,24 +88,56 @@ public class Connect extends Thread implements Config {
 				mensaje = cinput(out, in);
 				
 				if(mensaje.equalsIgnoreCase("UN")) {
+					userCreator(out);
+					write(out,"└▐► UserName:");
+					String nameUser = cinput(out, in);
+					user.setName(nameUser);
+					chatConnector(out);
+					write(out,"└▐► Name:");
+					String name = cinput(out, in);
+					write(out,"└▐► Pass:");
+					String pass = cinput(out, in);
+					write(out,"Connectando a: " + name + ":" + pass);	
+					Sala s = this.salas.getSala(name.toLowerCase());
+					if(s != null) {
+						s.addUser(user);
+						if(s.getPass().equals(pass)) {
+							connectToChat(s,user,out,in);
+						}
+					}else {
+						write(out,"La sala marcada no existe");
+					}
+					
 					
 				}else if(mensaje.equalsIgnoreCase("CR")){
+					//IdGen idgen = new IdGen();
+					userCreator(out);
+					write(out,"└▐► UserName:");
+					String nameUser = cinput(out, in);
+					user.setName(nameUser);
 					msgCreator(out);
 					write(out,"└▐► Name:");
 					String name = cinput(out, in);
 					write(out,"└▐► Pass:");
 					String pass = cinput(out, in);
-					write(out,name + ":" + pass);
 					while(true) {
 						write(out,"► Desea Crearla? S/N");
 						String qcrate = cinput(out, in);
 						if(qcrate.equalsIgnoreCase("S")) {
 							Sala s = new Sala();
+							name = name.toLowerCase();
+							name = name + "#" + idgen.getAleatorygen(10);
 							s.addUser(user);
 							s.setName(name);
 							s.setPass(pass);
 							salas.addNewSala(s);
-							connectToChat(s,out,in);
+							write(out,"Creando: " + name + ":" + pass);
+							connectToChat(s,user,out,in);
+							
+							
+							//System.out.println("pasa");
+							//write(out,"diconnect","d");
+							//System.out.println("he salido");
 							//break;
 						}
 					}
@@ -119,14 +156,58 @@ public class Connect extends Thread implements Config {
 		}
 	}
 	
-	private void connectToChat(Sala s,DataOutputStream out,DataInputStream in) {
+	private void connectToChat(Sala s,Usuario user,DataOutputStream out,DataInputStream in) {
 		startChat(out);
 		while(true) {
-			String mensajeChat = read(in);//(out, in);
-			System.out.println(mensajeChat);
+			String mensajeChat = read(in);
+			boolean toME = false;
+			boolean viewCommands = false;
 			
-			
+			if(mensajeChat.contains("/")) {
+				if(mensajeChat.equalsIgnoreCase("/help")) {
+					toME = true;
+					viewCommands = true;
+				}else if(mensajeChat.contains("/e:")) {
+					if(mensajeChat.equalsIgnoreCase("/e:girl")) {
+						mensajeChat = "👧";
+					}else if(mensajeChat.equalsIgnoreCase("/e:heart")) {
+						mensajeChat = "❤";
+					}
+				}else if(mensajeChat.contains("/a:")) {
+					if(mensajeChat.equalsIgnoreCase("/a:face")) {
+						mensajeChat = "  █ █\r\n"
+									+ " ▄   ▄\r\n"
+									+ "  ▀▀▀";
+					}
+				}
+				
+			}
+			if(toME == false) {
+				for(int i = 0; i < s.getUsuarios().size();i++) {
+					if(user.getId() != s.getUsuarios().get(i).getId()) {
+						DataOutputStream outOth = s.getUsuarios().get(i).getOut();
+						chatWrite(outOth,"[ "+user.getName()+" ] \n" + mensajeChat,s.getUsuarios().get(i));
+					}
+				}
+			}else {
+				if(viewCommands) {
+					sendCahtCommandHelp(out,user);
+				}
+			}
 		}
+	}
+	
+	private void sendCahtCommandHelp(DataOutputStream out,Usuario u) {
+		chatWrite(out, "Principales", user);
+		chatWrite(out, "/help", user);
+		chatWrite(out, "Emojis", user);
+		chatWrite(out, "/e:girl", user);
+		chatWrite(out, "/e:heart", user);
+		chatWrite(out, "Stikers", user);
+		chatWrite(out, "/a:face", user);
+		// = 	  "\n"
+		//		+ "/e:girl\n"
+		//		+ "/e:heart\n";
 	}
 	
 	private void startChat(DataOutputStream out) {
@@ -137,6 +218,17 @@ public class Connect extends Thread implements Config {
 		write(out,"▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
 		write(out,"█████►    SALA CREATOR    ◄█████");
 		write(out,"▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
+	}
+	private void chatConnector(DataOutputStream out) {
+		write(out,"▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+		write(out,"█████►    SALA CONNECTION    ◄█████");
+		write(out,"▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
+	}
+	
+	private void userCreator(DataOutputStream out) {
+		write(out,"▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+		write(out,"█████►    PROFILE CREATOR    ◄█████");
+		write(out,"▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
 	}
 	
 	private void list(DataOutputStream out) {
@@ -236,13 +328,32 @@ public class Connect extends Thread implements Config {
 	private void write(DataOutputStream out, String msg) {
 		write(out, "msg", msg);
 	}
-
+	
+	
+	private void chatWrite(DataOutputStream out, String msg, Usuario user) {
+		try {
+			String data = msg;
+			if(startCryptTell) {
+				data = user.getClientCrypter().crypt(data);
+			}
+			
+			out.writeUTF(data);
+		} catch (IOException e) {
+			System.out.println("Fallo al escribir datos, Rompiendo conexion | Client: " + this.idClient);
+			e.printStackTrace();
+			this.finalizated = true;
+			this.stop(); // Revisar error al petar cliente
+		}
+	}
 	private void write(DataOutputStream out, String type, String msg) {
 		try {
+			String data;
+
 			msg = msg.replaceAll(";", "");
 			type = type.replaceAll(";", "");
 			
-			String data = type + ";" + msg;
+			data = type + ";" + msg;
+
 			if(startCryptTell) {
 				data = crClient.crypt(data);
 			}

@@ -37,6 +37,7 @@ public class Sala {
 	
 	public synchronized void addUser(Usuario u) {
 		this.contUsers++;
+		u.setId(contUsers);
 		this.usuarios.add(u);
 	}
 	

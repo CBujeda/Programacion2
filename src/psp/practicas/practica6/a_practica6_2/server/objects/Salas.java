@@ -30,6 +30,18 @@ public class Salas {
 		}
 	}
 	
+	public synchronized Sala getSala(String name) {
+		Sala s = null;
+		for(int i = 0; i < salas.size(); i++) {
+			if(salas.get(i).getName().equalsIgnoreCase(name)) {
+				s = salas.get(i);
+				break;
+			}
+		}
+		
+		return s;
+	}
+	
 	public synchronized ArrayList<String> getAllSalaStr() {
 		ArrayList<String> salasStr = new ArrayList<String>();
 		salasStr.add("█████████████████► SALAS ◄█████████████████");

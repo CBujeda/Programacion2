@@ -72,7 +72,13 @@ public class Client  implements Config {
 		            				if(startCyphredTell) {
 		        		            	String mCDecrypt = crClient.decrypt(mensajeChat);
 		        		            	System.out.println(mCDecrypt);
-		        		            	
+		        		            	/*
+		        		            	if(mCDecrypt.equalsIgnoreCase("diconnect;d")) {
+		        		            		System.out.println("Me he desconectado");
+		        		            		i.closeThread();
+		        		            		i.interrupt();
+		        		            		break;
+		        		            	}*/
 		                			}
 		            			}
 		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {

@@ -25,13 +25,13 @@ public class Sala {
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public synchronized void setName(String name) {
 		this.name = name;
 	}
-	public String getPass() {
+	public  String getPass() {
 		return pass;
 	}
-	public void setPass(String pass) {
+	public synchronized void setPass(String pass) {
 		this.pass = pass;
 	}
 	
@@ -41,7 +41,7 @@ public class Sala {
 		this.usuarios.add(u);
 	}
 	
-	public ArrayList<Usuario> getUsuarios() {
+	public synchronized ArrayList<Usuario> getUsuarios() {
 		return usuarios;
 	}
 	public void setUsuarios(ArrayList<Usuario> usuarios) {

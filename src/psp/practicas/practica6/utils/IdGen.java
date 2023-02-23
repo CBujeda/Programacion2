@@ -13,7 +13,7 @@ public class IdGen {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void enableAntyUsed() {
+	public synchronized void enableAntyUsed() {
 		this.enableAntyDouble = true;
 	}
 	
@@ -29,7 +29,7 @@ public class IdGen {
 		return characters;
 	}
 	public String getAleatorygen(int size) {return getAleatorygen(size,charactersArray());}
-	public String getAleatorygen(int size,String[] characters) {
+	public synchronized String getAleatorygen(int size,String[] characters) {
 		String cadena = "";
 		for(int i = 0; i < size;i++) {
 			int random = (int) (Math.random() * ((characters.length-1) - 0)) + 0;

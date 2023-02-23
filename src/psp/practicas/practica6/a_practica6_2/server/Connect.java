@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import psp.practicas.practica6.Config;
 import psp.practicas.practica6.a_practica6_2.server.objects.Sala;
@@ -30,8 +31,10 @@ public class Connect extends Thread implements Config {
     private boolean startCryptTell;
     private Salas salas;
     private Usuario user;
-    IdGen idgen;
-	public Connect(ServerSocket ss, Socket cs, int maxID,Salas s,IdGen idgen) {
+    private IdGen idgen;
+    private Semaphore sem;
+    
+	public Connect(ServerSocket ss, Socket cs, int maxID,Salas s,IdGen idgen,Semaphore sem) {
 		this.crServer = new Cifrator();
 		this.crServer.genKeys();
 		this.crClient = new Cifrator();
@@ -44,7 +47,7 @@ public class Connect extends Thread implements Config {
 		this.salas = s;
 		this.user = new Usuario();
 		this.idgen = idgen;
-
+		this.sem = sem;
 	}
 
 	/**
@@ -180,15 +183,24 @@ public class Connect extends Thread implements Config {
 									+ "  ▀▀▀";
 					}
 				}
-				
+				chatWrite(out, mensajeChat, user);	
 			}
 			if(toME == false) {
+				try {
+					this.sem.acquire();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				for(int i = 0; i < s.getUsuarios().size();i++) {
 					if(user.getId() != s.getUsuarios().get(i).getId()) {
 						DataOutputStream outOth = s.getUsuarios().get(i).getOut();
 						chatWrite(outOth,"[ "+user.getName()+" ] \n" + mensajeChat,s.getUsuarios().get(i));
 					}
 				}
+				this.sem.release();
+				
+				
 			}else {
 				if(viewCommands) {
 					sendCahtCommandHelp(out,user);
@@ -198,13 +210,15 @@ public class Connect extends Thread implements Config {
 	}
 	
 	private void sendCahtCommandHelp(DataOutputStream out,Usuario u) {
-		chatWrite(out, "Principales", user);
-		chatWrite(out, "/help", user);
-		chatWrite(out, "Emojis", user);
-		chatWrite(out, "/e:girl", user);
-		chatWrite(out, "/e:heart", user);
-		chatWrite(out, "Stikers", user);
-		chatWrite(out, "/a:face", user);
+		chatWrite(out, "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄", user);
+		chatWrite(out, "█████► COMANDOS ◄█████", user);
+		chatWrite(out, "█► /help", user);
+		chatWrite(out, "█████►  EMOJIS  ◄█████", user);
+		chatWrite(out, "█► /e:girl", user);
+		chatWrite(out, "█► /e:heart", user);
+		chatWrite(out, "█████► STIKERS  ◄█████", user);
+		chatWrite(out, "█► /a:face", user);
+		chatWrite(out, "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀", user);
 		// = 	  "\n"
 		//		+ "/e:girl\n"
 		//		+ "/e:heart\n";

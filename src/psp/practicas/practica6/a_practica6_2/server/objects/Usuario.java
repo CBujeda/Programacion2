@@ -28,31 +28,31 @@ public class Usuario {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public synchronized void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public synchronized void setName(String name) {
 		this.name = name;
 	}
-	public DataInputStream getIn() {
+	public synchronized DataInputStream getIn() {
 		return in;
 	}
-	public void setIn(DataInputStream in) {
+	public synchronized void setIn(DataInputStream in) {
 		this.in = in;
 	}
-	public DataOutputStream getOut() {
+	public synchronized DataOutputStream getOut() {
 		return out;
 	}
-	public void setOut(DataOutputStream out) {
+	public synchronized void setOut(DataOutputStream out) {
 		this.out = out;
 	}
-	public Cifrator getClientCrypter() {
+	public synchronized Cifrator getClientCrypter() {
 		return clientCrypter;
 	}
-	public void setClientCrypter(Cifrator clientCrypter) {
+	public synchronized void setClientCrypter(Cifrator clientCrypter) {
 		this.clientCrypter = clientCrypter;
 	}
 	

@@ -13,11 +13,19 @@ public class IdGen {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual establece el anti id used
+	 */
 	public synchronized void enableAntyUsed() {
 		this.enableAntyDouble = true;
 	}
 	
-	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual devuelve un array con caracteres
+	 * 		 alfanumericos
+	 */
 	private String[] charactersArray() {
 		String[] characters =  {"1","2","3","4","5",
 				                "6","7","8","9","a",
@@ -28,6 +36,11 @@ public class IdGen {
 				                "w","x","y","z","0"};
 		return characters;
 	}
+	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual genera una key aleatoria
+	 */
 	public String getAleatorygen(int size) {return getAleatorygen(size,charactersArray());}
 	public synchronized String getAleatorygen(int size,String[] characters) {
 		String cadena = "";
@@ -44,6 +57,10 @@ public class IdGen {
 		return cadena;
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo el cual verifica si una cadena ya es existente
+	 */
 	public boolean isInUsed(String cadena) {
 		for(int i = 0; i < used.size();i++) {
 			if(cadena.equals(used.get(i))) {

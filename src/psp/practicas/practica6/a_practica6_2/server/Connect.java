@@ -159,6 +159,10 @@ public class Connect extends Thread implements Config {
 		}
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo de inicio de metodo de envio tipo chat
+	 */
 	private void connectToChat(Sala s,Usuario user,DataOutputStream out,DataInputStream in) {
 		startChat(out);
 		while(true) {
@@ -209,6 +213,10 @@ public class Connect extends Thread implements Config {
 		}
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo que muestra los comandos de chat
+	 */
 	private void sendCahtCommandHelp(DataOutputStream out,Usuario u) {
 		chatWrite(out, "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄", user);
 		chatWrite(out, "█████► COMANDOS ◄█████", user);
@@ -228,6 +236,10 @@ public class Connect extends Thread implements Config {
 		write(out,"chat","C");
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodos con los cuales mostramos un mensaje
+	 */
 	private void msgCreator(DataOutputStream out) {
 		write(out,"▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
 		write(out,"█████►    SALA CREATOR    ◄█████");
@@ -244,7 +256,10 @@ public class Connect extends Thread implements Config {
 		write(out,"█████►    PROFILE CREATOR    ◄█████");
 		write(out,"▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
 	}
-	
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual listamos las salas disponibles
+	 */
 	private void list(DataOutputStream out) {
 		ArrayList<String> s = salas.getAllSalaStr();
 		for(int i = 0; i < s.size(); i++) {
@@ -252,7 +267,10 @@ public class Connect extends Thread implements Config {
 		}
 	}
 	
-	
+	/*
+	 * Pre:
+	 * Post: metodo con el cual mostramos los comandos del programa
+	 */
 	private void help(DataOutputStream out) {
 		write(out,"███████████████████████► Comandos utiles ◄███████████████████████");
 		write(out,"█ [UN]   -  Unirse a una sala de chat ya creada anteriormente.  █");
@@ -343,7 +361,10 @@ public class Connect extends Thread implements Config {
 		write(out, "msg", msg);
 	}
 	
-	
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual escribimos en un tipo chat
+	 */
 	private void chatWrite(DataOutputStream out, String msg, Usuario user) {
 		try {
 			String data = msg;
@@ -359,6 +380,11 @@ public class Connect extends Thread implements Config {
 			this.stop(); // Revisar error al petar cliente
 		}
 	}
+	
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual escribimos de forma usual
+	 */
 	private void write(DataOutputStream out, String type, String msg) {
 		try {
 			String data;

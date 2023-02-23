@@ -5,6 +5,10 @@ import java.io.IOException;
 
 public class MainClient {
 
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual creamos un nuevo cliente y lo iniciamos
+	 */
 	public static void main(String[] args) {
 		Client c;
 		try {

@@ -17,14 +17,11 @@ public class Server extends Thread implements Config{
 	 * para su posterior control efectivo
 	 */
 	private ArrayList<Connect> lc = new ArrayList<Connect>();
-	int maxID = 0;	// Id de conexion
-	
+	int maxID = 0;	// Id de conexions
     protected ServerSocket ss; //Socket del servidor
     protected Socket cs; //Socket del cliente
-
     private IdGen idgen;
     private Salas s;
-    
     private  Semaphore sem;
     
     

@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import psp.practicas.practica6.utils.rsaUtil.Cifrator;
-
+/*
+ * Objeto el cual contiene un usuario
+ */
 public class Usuario {
 
 	
@@ -25,6 +27,10 @@ public class Usuario {
 		this.in = in;
 		this.out = out;
 	}
+	
+	/*
+	 * GETTERS AND SETTERS
+	 */
 	public int getId() {
 		return id;
 	}

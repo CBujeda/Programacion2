@@ -10,9 +10,9 @@ import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Input extends Thread implements Config{
 
-	Scanner sc;
-	DataOutputStream out;
-	Cifrator crServer;
+	private Scanner sc;
+	private DataOutputStream out;
+	private Cifrator crServer;
 	private boolean active;
 	
 	public Input() {
@@ -30,10 +30,14 @@ public class Input extends Thread implements Config{
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * Pre:
+	 * Post: Metodo de inicio del thread con el cual estamos en espera
+	 * 		 solo admite como maximo 140 caracteres 
+	 */
 	@Override
 	public void run() {
 		super.run();
-		
 		while(this.active) {
 			String getInput = "";
 			getInput = this.sc.nextLine();
@@ -45,11 +49,18 @@ public class Input extends Thread implements Config{
 		}
 		//sc.close();
 	}
-	
+	/*
+	 * Pre:
+	 * Post: Metodo no implementado para cerrar un thread
+	 */
 	public void closeThread() {
 		this.active = false;
 	}
 	
+	/*
+	 * Pre:
+	 * Post: Metodo con el cual enviamos un string
+	 */
 	public String write(Scanner sc,DataOutputStream out,Cifrator crServer, String w) {
         try {
         	w = crServer.crypt(w);

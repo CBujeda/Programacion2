@@ -1,7 +1,9 @@
 package psp.practicas.practica6.a_practica6_2.server.objects;
 
 import java.util.ArrayList;
-
+/*
+ * Objeto el cual actua como la sala del chat
+ */
 public class Sala {
 
 	private int contUsers;
@@ -22,6 +24,10 @@ public class Sala {
 		this.pass = pass;
 		this.usuarios = usuarios;
 	}
+	
+	/*
+	 * GETTERS AND SETTERS
+	 */
 	public String getName() {
 		return name;
 	}

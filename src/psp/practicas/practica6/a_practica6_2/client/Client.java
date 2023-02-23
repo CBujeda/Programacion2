@@ -10,9 +10,8 @@ import psp.practicas.practica6.Config;
 import psp.practicas.practica6.utils.rsaUtil.Cifrator;
 
 public class Client  implements Config {
-	//private boolean colors = true;
-	private String publicKeyServer;
 	
+	private String publicKeyServer;
 	private String publicKeyClient;
 	private String privateKeyClient;
 	private Cifrator crClient;
@@ -40,8 +39,6 @@ public class Client  implements Config {
 	        	// Canal para enviar mensajes (salida)
 	            DataOutputStream out = new DataOutputStream(cs.getOutputStream());
 	            String cmsg = "";
-	            
-	            
 	        	while(true) {
 
 		            String smsg = in.readUTF();
@@ -72,13 +69,6 @@ public class Client  implements Config {
 		            				if(startCyphredTell) {
 		        		            	String mCDecrypt = crClient.decrypt(mensajeChat);
 		        		            	System.out.println(mCDecrypt);
-		        		            	/*
-		        		            	if(mCDecrypt.equalsIgnoreCase("diconnect;d")) {
-		        		            		System.out.println("Me he desconectado");
-		        		            		i.closeThread();
-		        		            		i.interrupt();
-		        		            		break;
-		        		            	}*/
 		                			}
 		            			}
 		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {

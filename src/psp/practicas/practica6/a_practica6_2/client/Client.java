@@ -17,6 +17,7 @@ public class Client  implements Config {
 	private Cifrator crClient;
 	private Cifrator crServer;
 	private boolean startCyphredTell;
+	private boolean diconnect;
 	
 	protected Socket cs;
 	public Client() throws IOException {
@@ -25,6 +26,7 @@ public class Client  implements Config {
 		crClient = new Cifrator();
 		crClient.genKeys();
 		crServer = new Cifrator();
+		this.diconnect = false;
 		// TODO Auto-generated constructor stub
 	}
 	/*
@@ -68,8 +70,15 @@ public class Client  implements Config {
 		            				String mensajeChat = in.readUTF();
 		            				if(startCyphredTell) {
 		        		            	String mCDecrypt = crClient.decrypt(mensajeChat);
-		        		            	System.out.println(mCDecrypt);
-		                			}
+		        		            	if(mCDecrypt.equalsIgnoreCase("close;C")) {
+		        		            		this.diconnect = true;
+		        		            		i.closeThread();
+		        		            		cs.close();
+		        		            		break;
+		        		            	}else {
+		        		            		System.out.println(mCDecrypt);
+		        		            	}
+		        		            }
 		            			}
 		            		}else if(dsmsg[0].equalsIgnoreCase("close")) {
 		            			cs.close();
@@ -78,6 +87,9 @@ public class Client  implements Config {
 		            }
 		            if(cmsg.equalsIgnoreCase("exit") ) {
 		            	cs.close();
+		            }
+		            if(this.diconnect == true) {
+		            	break;
 		            }
 	        	}
 	        }

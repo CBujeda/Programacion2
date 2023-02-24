@@ -14,7 +14,7 @@ public class Input extends Thread implements Config{
 	private DataOutputStream out;
 	private Cifrator crServer;
 	private boolean active;
-	
+
 	public Input() {
 		super();
 		 this.sc = new Scanner(System.in);
@@ -39,12 +39,14 @@ public class Input extends Thread implements Config{
 	public void run() {
 		super.run();
 		while(this.active) {
-			String getInput = "";
-			getInput = this.sc.nextLine();
-			if(getInput.length() <= 140) {
-				write(this.sc,this.out,this.crServer,getInput);
-			}else {
-				System.err.println("Sobrepaso el limite de 140 caracteres");
+			if(this.active) {
+				String getInput = "";
+				getInput = this.sc.nextLine();
+				if(getInput.length() <= 140) {
+					write(this.sc,this.out,this.crServer,getInput);
+				}else {
+					System.err.println("Sobrepaso el limite de 140 caracteres");
+				}
 			}
 		}
 		//sc.close();
@@ -62,14 +64,17 @@ public class Input extends Thread implements Config{
 	 * Post: Metodo con el cual enviamos un string
 	 */
 	public String write(Scanner sc,DataOutputStream out,Cifrator crServer, String w) {
-        try {
-        	w = crServer.crypt(w);
-			out.writeUTF(w);
+		try {
+			if(this.active) {
+				w = crServer.crypt(w);
+        		out.writeUTF(w);
+        	}
 			return w;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "error";	
 		}
+        
 	}
 
 }
